@@ -426,6 +426,17 @@ function initShopPage() {
       }
     }
     grid.innerHTML = filtered.map(p => createProductCard(p)).join('');
+    
+    const resultsCountEl = document.getElementById('shop-results-count');
+    if (resultsCountEl) {
+      if (filtered.length === 0) {
+        resultsCountEl.textContent = 'Showing 0 results';
+      } else if (filtered.length < products.length) {
+        resultsCountEl.textContent = `Showing 1–${filtered.length} of ${products.length} results`;
+      } else {
+        resultsCountEl.textContent = `Showing all ${products.length} results`;
+      }
+    }
   }
 
   if (sortFilter) sortFilter.addEventListener('change', renderShop);
@@ -535,12 +546,7 @@ function initProductPage() {
     if (offEl) offEl.textContent = `Rs. ${offPrice}`;
     
     if (badgeEl) {
-      if (regPrice > offPrice && offPrice > 0) {
-        badgeEl.textContent = `-20%`;
-        badgeEl.style.display = 'block';
-      } else {
-        badgeEl.style.display = 'none';
-      }
+      badgeEl.style.display = 'none';
     }
   }
   

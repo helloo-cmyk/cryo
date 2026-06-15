@@ -25,8 +25,8 @@ class HeaderComponent extends HTMLElement {
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                 </div>
                 <div class="info-text">
-                  <span class="info-label">LMQ Rd, opp. RTO</span>
-                  <span class="info-value">NAWAN SHEHR, MULTAN</span>
+                  <span class="info-label">Fiesta Garden, Near RTO Office</span>
+                  <span class="info-value">NAWAN SHEHAR, MULTAN</span>
                 </div>
               </div>
               <div class="header-socials">
@@ -178,7 +178,7 @@ class FooterComponent extends HTMLElement {
               <div class="footer-links">
                 <p><strong>Phone:</strong> 0301-4138007</p>
                 <p><strong>WhatsApp:</strong> <a href="https://wa.me/923014138007" target="_blank" rel="noopener">0301-4138007</a></p>
-                <p><strong>Address:</strong><br>LMQ Rd, opp. RTO,<br>Nawan Shehr, Multan, 60000</p>
+                <p><strong>Address:</strong><br>Fiesta Garden, Nawan Shehar,<br>Near RTO Office, Multan</p>
               </div>
             </div>
           </div>
