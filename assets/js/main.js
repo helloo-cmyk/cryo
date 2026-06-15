@@ -717,8 +717,8 @@ function initDealerPage() {
       const city = document.getElementById('dlr-city').value;
       const type = document.getElementById('dlr-type').value;
       const qty = document.getElementById('dlr-qty').value;
-      const address = document.getElementById('dlr-address').value;
-      const notes = document.getElementById('dlr-notes').value;
+      const address = document.getElementById('dlr-address') ? document.getElementById('dlr-address').value : 'N/A';
+      const notes = document.getElementById('dlr-notes') ? document.getElementById('dlr-notes').value : 'N/A';
 
       const msg = `Hi CRYO Team! I'm interested in becoming a dealer.\n\nBusiness: ${business}\nContact: ${name}\nCity: ${city}\nType: ${type}\nMonthly Need: ${qty}\nWhatsApp: ${phone}\nAddress: ${address}\nNotes: ${notes}\n\nPlease share wholesale pricing and terms.`;
       
