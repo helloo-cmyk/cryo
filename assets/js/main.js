@@ -133,8 +133,56 @@ function addToCart(productId, quantity, size, color, showAlert = true) {
   }
   saveCart(cart);
   if (showAlert) {
-    alert('Added to cart successfully!');
+    showToast('Added to cart successfully!');
   }
+}
+
+// --- Toast Notification ---
+function showToast(message) {
+  let toastContainer = document.getElementById('toast-container');
+  if (!toastContainer) {
+    toastContainer = document.createElement('div');
+    toastContainer.id = 'toast-container';
+    toastContainer.style.position = 'fixed';
+    toastContainer.style.bottom = '20px';
+    toastContainer.style.right = '20px';
+    toastContainer.style.zIndex = '9999';
+    toastContainer.style.display = 'flex';
+    toastContainer.style.flexDirection = 'column';
+    toastContainer.style.gap = '10px';
+    document.body.appendChild(toastContainer);
+  }
+
+  const toast = document.createElement('div');
+  toast.style.background = '#111';
+  toast.style.color = '#fff';
+  toast.style.padding = '12px 20px';
+  toast.style.borderRadius = '4px';
+  toast.style.borderLeft = '4px solid #E8211D';
+  toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+  toast.style.fontFamily = "'Inter', sans-serif";
+  toast.style.fontSize = '14px';
+  toast.style.opacity = '0';
+  toast.style.transform = 'translateX(100%)';
+  toast.style.transition = 'all 0.3s ease';
+  toast.innerText = message;
+
+  toastContainer.appendChild(toast);
+
+  // Animate in
+  setTimeout(() => {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(0)';
+  }, 10);
+
+  // Animate out and remove
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+      if(toast.parentElement) toast.remove();
+    }, 300);
+  }, 3000);
 }
 
 function removeFromCart(index) {
@@ -287,6 +335,29 @@ function initShopPage() {
   const grid = document.getElementById('shop-products');
   const sortFilter = document.getElementById('filter-sort');
   
+  // Mobile Sidebar Toggle
+  const filterBtn = document.getElementById('mobile-filter-btn');
+  const sidebar = document.getElementById('shop-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const closeBtn = document.getElementById('sidebar-close');
+
+  if (filterBtn && sidebar && overlay && closeBtn) {
+    filterBtn.addEventListener('click', () => {
+      sidebar.classList.add('open');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    });
+    
+    const closeSidebar = () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    closeBtn.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+  }
+  
   // New Filter Elements
   const searchInput = document.getElementById('search-input');
   const searchBtn = document.getElementById('search-btn');
@@ -337,6 +408,34 @@ function initShopPage() {
   }
 
   if (sortFilter) sortFilter.addEventListener('change', renderShop);
+
+  // Custom Dropdown Logic
+  const sortSelected = document.getElementById('sort-selected');
+  const sortOptions = document.getElementById('sort-options');
+  
+  if (sortSelected && sortOptions) {
+    sortSelected.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sortOptions.classList.toggle('open');
+    });
+    
+    document.addEventListener('click', () => {
+      sortOptions.classList.remove('open');
+    });
+    
+    const options = sortOptions.querySelectorAll('.sort-option');
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        options.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        sortSelected.querySelector('span').innerText = opt.innerText;
+        if (sortFilter) {
+          sortFilter.value = opt.getAttribute('data-value');
+          renderShop();
+        }
+      });
+    });
+  }
   
   // Search Events
   if (searchInput) {
@@ -702,10 +801,10 @@ function initDealerPage() {
         if(!el.value.trim()) {
           isValid = false;
           el.style.borderColor = 'var(--primary)';
-          err.style.display = 'block';
+          if(err) err.style.display = 'block';
         } else {
           el.style.borderColor = 'var(--border)';
-          err.style.display = 'none';
+          if(err) err.style.display = 'none';
         }
       });
 
