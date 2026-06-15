@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seed Database</title>
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="font-family: Arial, sans-serif; padding: 50px;">
+  <h2>Database Seeder</h2>
+  <p id="status">Checking authentication...</p>
+  
+  <script src="../assets/js/supabase-config.js"></script>
+  <script>
+    const originalProducts = [
+      {
+        name: 'CRYO Green Radiator Coolant 1L',
+        color: 'green',
+        size: '1L',
+        regularPrice: 650,
+        offerPrice: 553,
+        imageUrl: '../assets/images/green-1L.jpg',
+        inStock: true
+      },
+      {
+        name: 'CRYO Red Radiator Coolant 1L',
+        color: 'red',
+        size: '1L',
+        regularPrice: 650,
+        offerPrice: 553,
+        imageUrl: '../assets/images/red-1L.jpg',
+        inStock: true
+      },
+      {
+        name: 'CRYO Blue Radiator Coolant 1L',
+        color: 'blue',
+        size: '1L',
+        regularPrice: 650,
+        offerPrice: 553,
+        imageUrl: '../assets/images/blue-1L.jpg',
+        inStock: true
+      },
+      {
+        name: 'CRYO Green Radiator Coolant 4L',
+        color: 'green',
+        size: '4L',
+        regularPrice: 2300,
+        offerPrice: 1955,
+        imageUrl: '../assets/images/green-4L.jpg',
+        inStock: true
+      },
+      {
+        name: 'CRYO Red Radiator Coolant 4L',
+        color: 'red',
+        size: '4L',
+        regularPrice: 2300,
+        offerPrice: 1955,
+        imageUrl: '../assets/images/red-4L.jpg',
+        inStock: true
+      },
+      {
+        name: 'CRYO Blue Radiator Coolant 4L',
+        color: 'blue',
+        size: '4L',
+        regularPrice: 2300,
+        offerPrice: 1955,
+        imageUrl: '../assets/images/blue-4L.jpg',
+        inStock: true
+      }
+    ];
+
+    const statusEl = document.getElementById('status');
+
+    supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      const user = session?.user;
+      if (user) {
+        statusEl.textContent = 'Authenticated. Importing products...';
+        try {
+          for (const product of originalProducts) {
+            const { error } = await supabaseClient.from('products').insert([product]);
+            if (error) throw error;
+          }
+          statusEl.textContent = '✅ All 6 products successfully imported! You can now close this page and refresh your admin panel.';
+          statusEl.style.color = 'green';
+        } catch (error) {
+          statusEl.textContent = '❌ Error: ' + error.message;
+          statusEl.style.color = 'red';
+        }
+      } else {
+        statusEl.textContent = '⚠️ You are not logged in! Please go to /login, log in, and then come back to this page.';
+        statusEl.style.color = 'orange';
+      }
+    });
+  </script>
+</body>
+</html>

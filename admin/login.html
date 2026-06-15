@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | CRYO</title>
+  <link rel="stylesheet" href="/admin/assets/css/admin.css">
+  
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="/assets/images/cryo-logo-horizontal.png" alt="CRYO Logo">
+        <h2>Admin Portal</h2>
+      </div>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" required placeholder="admin@cryo.pk">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" required placeholder="••••••••">
+        </div>
+        
+        <button type="submit" id="login-btn" class="btn-admin">Login</button>
+        <p id="error-msg" class="error-message"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="/assets/js/supabase-config.js"></script>
+  <script src="/admin/assets/js/auth.js"></script>
+</body>
+</html>

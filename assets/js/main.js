@@ -1,85 +1,46 @@
-const products = [
-  {
-    id: 'green-1l',
-    name: 'CRYO Green Radiator Coolant 1L',
-    color: 'green',
-    size: '1L',
-    weight: '1 kg',
-    regularPrice: 650,
-    offerPrice: 553,
-    discount: 15,
-    image1L: 'assets/images/green-1L.jpg',
-    image4L: 'assets/images/green-4L.jpg',
-    colorHex: '#4CAF50'
-  },
-  {
-    id: 'red-1l',
-    name: 'CRYO Red Radiator Coolant 1L',
-    color: 'red',
-    size: '1L',
-    weight: '1 kg',
-    regularPrice: 650,
-    offerPrice: 553,
-    discount: 15,
-    image1L: 'assets/images/red-1L.jpg',
-    image4L: 'assets/images/red-4L.jpg',
-    colorHex: '#E53935'
-  },
-  {
-    id: 'blue-1l',
-    name: 'CRYO Blue Radiator Coolant 1L',
-    color: 'blue',
-    size: '1L',
-    weight: '1 kg',
-    regularPrice: 650,
-    offerPrice: 553,
-    discount: 15,
-    image1L: 'assets/images/blue-1L.jpg',
-    image4L: 'assets/images/blue-4L.jpg',
-    colorHex: '#1E88E5'
-  },
-  {
-    id: 'green-4l',
-    name: 'CRYO Green Radiator Coolant 4L',
-    color: 'green',
-    size: '4L',
-    weight: '4 kg',
-    regularPrice: 2300,
-    offerPrice: 1955,
-    discount: 15,
-    image1L: 'assets/images/green-1L.jpg',
-    image4L: 'assets/images/green-4L.jpg',
-    colorHex: '#4CAF50'
-  },
-  {
-    id: 'red-4l',
-    name: 'CRYO Red Radiator Coolant 4L',
-    color: 'red',
-    size: '4L',
-    weight: '4 kg',
-    regularPrice: 2300,
-    offerPrice: 1955,
-    discount: 15,
-    image1L: 'assets/images/red-1L.jpg',
-    image4L: 'assets/images/red-4L.jpg',
-    colorHex: '#E53935'
-  },
-  {
-    id: 'blue-4l',
-    name: 'CRYO Blue Radiator Coolant 4L',
-    color: 'blue',
-    size: '4L',
-    weight: '4 kg',
-    regularPrice: 2300,
-    offerPrice: 1955,
-    discount: 15,
-    image1L: 'assets/images/blue-1L.jpg',
-    image4L: 'assets/images/blue-4L.jpg',
-    colorHex: '#1E88E5'
-  }
-];
+// --- Global State ---
+let products = [];
+let waNumber = '923014138007';
+let defaultDeliveryFee = 200;
 
-const waNumber = '923014138007';
+// Function to fetch data from Supabase before initializing the app
+async function fetchSupabaseData() {
+  try {
+    // Fetch global settings
+    if (typeof supabaseClient !== 'undefined') {
+      const { data: settingsData, error: settingsError } = await supabaseClient.from('settings').select('*').eq('id', 'global').single();
+      if (!settingsError && settingsData) {
+        if (settingsData.whatsappNumber) waNumber = settingsData.whatsappNumber;
+        if (settingsData.deliveryCharge) defaultDeliveryFee = settingsData.deliveryCharge;
+      }
+
+      // Fetch products
+      const { data: productsData, error: productsError } = await supabaseClient.from('products').select('*').eq('inStock', true);
+      if (!productsError && productsData) {
+        products = productsData.map(data => {
+          return {
+            id: data.id,
+            name: data.name,
+            color: data.color,
+            size: data.size || '1L',
+            regularPrice: data.regularPrice || 0,
+            offerPrice: data.offerPrice || 0,
+            imageUrl: data.imageUrl || '../assets/images/placeholder.png',
+            shortDescription: data.shortDescription || '',
+            longDescription: data.longDescription || '',
+            features: data.features || '',
+            specifications: data.specifications || '',
+            colorHex: data.color === 'red' ? '#E53935' : (data.color === 'blue' ? '#1E88E5' : '#4CAF50')
+          };
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching data from Supabase:", error);
+    // Fallback or empty state handled gracefully
+  }
+}
+
 
 // --- Cart System ---
 function getCart() {
@@ -120,15 +81,19 @@ function addToCart(productId, quantity, size, color, showAlert = true) {
   if (existingItemIndex > -1) {
     cart[existingItemIndex].qty += parseInt(quantity);
   } else {
+    let selectedOfferPrice = product.offerPrice;
+    let selectedRegPrice = product.regularPrice;
+    let selectedImage = product.imageUrl;
+
     cart.push({
       id: product.id,
       name: product.name,
       size: size,
       color: color,
       qty: parseInt(quantity),
-      offerPrice: product.offerPrice,
-      regularPrice: product.regularPrice,
-      image: size === '1L' ? product.image1L : product.image4L
+      offerPrice: selectedOfferPrice,
+      regularPrice: selectedRegPrice,
+      image: selectedImage
     });
   }
   saveCart(cart);
@@ -236,37 +201,43 @@ function openWhatsAppCheckout(cart, details) {
 
 // --- Product Card Generation ---
 function createProductCard(product) {
+  let regPrice = Number(product.regularPrice || 0);
+  let offPrice = Number(product.offerPrice || 0);
+  let discountBadge = '';
+  if (regPrice > offPrice && offPrice > 0) {
+    discountBadge = `<div class="discount-badge">-20%</div>`;
+  }
+
   return `
     <div class="product-card">
       <div class="product-image" onclick="window.location.href='product.html?product=${product.id}'">
-        <img src="${product.image1L}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        ${discountBadge}
+        <div class="quick-view-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        <img src="${product.imageUrl}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="placeholder ${product.color} bottle-1l" style="display:none;"><span>CRYO ${product.size}</span></div>
+        <div class="hover-add-btn">VIEW DETAILS</div>
       </div>
       <div class="product-info">
-        <div class="product-category">${product.category || 'Radiator Coolant'}</div>
+        <div class="product-brand">${(product.category || 'Radiator Coolant').toUpperCase()} ${product.size}</div>
         <div class="product-title" onclick="window.location.href='product.html?product=${product.id}'">${product.name}</div>
-        <div class="product-meta">
-          <div class="product-price-col">
-            <span class="offer-price">Rs. ${product.offerPrice}</span>
-            <span class="regular-price">Rs. ${product.regularPrice}</span>
-          </div>
-          <div class="product-rating">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          </div>
+        <div class="product-price-row">
+          <span class="regular-price">Rs. ${product.regularPrice || 0}</span>
+          <span class="offer-price">Rs. ${product.offerPrice || 0}</span>
         </div>
-      </div>
-      <div class="product-actions-sharp" onclick="window.location.href='product.html?product=${product.id}'">
-        <span class="btn-add-cart-text">View Details</span>
-        <span class="btn-add-cart-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </span>
+        <div class="product-rating">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
       </div>
     </div>
   `;
 }
 
 // --- Initialize App ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await fetchSupabaseData();
+
   // Sticky Header with Hysteresis & WhatsApp Float toggle
   const header = document.querySelector('header');
   const waFloat = document.querySelector('.floating-wa');
@@ -434,9 +405,16 @@ function initShopPage() {
 
     // Price Filter
     if (priceMin && priceMax) {
-      const minVal = parseInt(priceMin.value);
-      const maxVal = parseInt(priceMax.value);
-      filtered = filtered.filter(p => p.offerPrice >= minVal && p.offerPrice <= maxVal);
+      const minStr = priceMin.value.trim();
+      const maxStr = priceMax.value.trim();
+      if (minStr !== '' || maxStr !== '') {
+        const minVal = minStr !== '' ? parseInt(minStr) : 0;
+        const maxVal = maxStr !== '' ? parseInt(maxStr) : Infinity;
+        filtered = filtered.filter(p => {
+          const cardPrice = Number(p.offerPrice || 0);
+          return cardPrice >= minVal && cardPrice <= maxVal;
+        });
+      }
     }
 
     // Sorting
@@ -485,11 +463,18 @@ function initShopPage() {
     searchInput.addEventListener('keyup', (e) => {
       if (e.key === 'Enter') renderShop();
     });
+    searchInput.addEventListener('input', () => {
+      if (searchInput.value.trim() === '') {
+        renderShop();
+      }
+    });
   }
   if (searchBtn) searchBtn.addEventListener('click', renderShop);
 
   // Price Filter Event
   if (priceFilterBtn) priceFilterBtn.addEventListener('click', renderShop);
+  if (priceMin) priceMin.addEventListener('input', renderShop);
+  if (priceMax) priceMax.addEventListener('input', renderShop);
 
   // Category Buttons Events
   document.querySelectorAll('.category-btn').forEach(btn => {
@@ -521,7 +506,7 @@ function initProductPage() {
   let product = products.find(p => p.id === productId);
   if (!product) product = products[0];
 
-  let currentSize = product.size;
+  let currentSize = '1L';
   let currentColor = product.color;
   let currentQty = 1;
 
@@ -532,55 +517,37 @@ function initProductPage() {
     breadcrumbTitle.textContent = product.name;
   }
 
-  // Render size thumbnails dynamically matching the product color
+  // Render size thumbs removed since size is fixed per product
   const thumbRow = document.querySelector('.thumbnail-row');
   if (thumbRow) {
-    thumbRow.innerHTML = `
-      <div class="thumbnail" data-size="1L">
-        <img src="${product.image1L}" alt="${product.name} 1L" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="placeholder ${product.color} bottle-1l" style="display:none; font-size: 8px;"><span>${product.color.toUpperCase()} 1L</span></div>
-      </div>
-      <div class="thumbnail" data-size="4L">
-        <img src="${product.image4L}" alt="${product.name} 4L" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="placeholder ${product.color} bottle-4l" style="display:none; font-size: 8px;"><span>${product.color.toUpperCase()} 4L</span></div>
-      </div>
-    `;
-
-    // Handle thumbnail clicks
-    thumbRow.querySelectorAll('.thumbnail').forEach(thumb => {
-      thumb.addEventListener('click', () => {
-        const size = thumb.dataset.size;
-        const sizeBtn = document.querySelector(`.size-toggle[data-size="${size}"]`);
-        if (sizeBtn) {
-          sizeBtn.click();
-        }
-      });
-    });
-  }
-
-  // Update active thumbnail highlight helper function
-  function updateActiveThumbnail() {
-    document.querySelectorAll('.thumbnail').forEach(t => {
-      if (t.dataset.size === currentSize) {
-        t.classList.add('active');
-      } else {
-        t.classList.remove('active');
-      }
-    });
+    thumbRow.innerHTML = ''; // Clear out thumbnails
   }
   
   function updatePriceDisplay() {
-    // Find matching product based on size and color to get correct prices
-    const targetProduct = products.find(p => p.color === currentColor && p.size === currentSize) || product;
-    document.getElementById('reg-price').textContent = `Rs. ${targetProduct.regularPrice}`;
-    document.getElementById('off-price').textContent = `Rs. ${targetProduct.offerPrice}`;
+    let regPrice = Number(product.regularPrice || 0);
+    let offPrice = Number(product.offerPrice || 0);
+    
+    const regEl = document.getElementById('reg-price');
+    const offEl = document.getElementById('off-price');
+    const badgeEl = document.getElementById('discount-badge-el');
+    
+    if (regEl) regEl.textContent = `Rs. ${regPrice}`;
+    if (offEl) offEl.textContent = `Rs. ${offPrice}`;
+    
+    if (badgeEl) {
+      if (regPrice > offPrice && offPrice > 0) {
+        badgeEl.textContent = `-20%`;
+        badgeEl.style.display = 'block';
+      } else {
+        badgeEl.style.display = 'none';
+      }
+    }
   }
   
   function updateImageDisplay() {
-    const targetProduct = products.find(p => p.color === currentColor && p.size === currentSize) || product;
     const imgEl = document.getElementById('main-image-el');
     const phEl = document.getElementById('main-placeholder-el');
-    const imageSrc = currentSize === '1L' ? targetProduct.image1L : targetProduct.image4L;
+    let imageSrc = product.imageUrl;
     
     imgEl.src = imageSrc;
     imgEl.style.display = 'block';
@@ -594,21 +561,27 @@ function initProductPage() {
     };
   }
 
+  function updateTextContent() {
+    const shortDesc = document.getElementById('product-short-desc');
+    if (shortDesc) shortDesc.innerHTML = product.shortDescription || '';
+
+    const longDesc = document.getElementById('product-long-desc');
+    if (longDesc) longDesc.innerHTML = product.longDescription || '';
+
+    const features = document.getElementById('product-features');
+    if (features) features.innerHTML = product.features || '';
+
+    const specs = document.getElementById('product-specs');
+    if (specs) specs.innerHTML = product.specifications || '';
+  }
+
   updatePriceDisplay();
   updateImageDisplay();
-  updateActiveThumbnail();
-
-  // Size toggles
+  updateTextContent();
+  
+  // Update UI to reflect the product's actual size
   document.querySelectorAll('.size-toggle').forEach(btn => {
-    if(btn.dataset.size === currentSize) btn.classList.add('active');
-    btn.addEventListener('click', (e) => {
-      document.querySelectorAll('.size-toggle').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      currentSize = e.target.dataset.size;
-      updatePriceDisplay();
-      updateImageDisplay();
-      updateActiveThumbnail();
-    });
+    btn.style.display = 'none'; // hide the size buttons entirely
   });
 
   // Qty
@@ -629,23 +602,19 @@ function initProductPage() {
 
   // Buttons
   document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-    // We add the specific variant the user selected
-    const targetProduct = products.find(p => p.color === currentColor && p.size === currentSize) || product;
-    addToCart(targetProduct.id, currentQty, currentSize, currentColor, true);
+    addToCart(product.id, currentQty, product.size, currentColor, true);
   });
 
   const buyNowBtn = document.getElementById('buy-now-btn');
   if (buyNowBtn) {
     buyNowBtn.addEventListener('click', () => {
-      const targetProduct = products.find(p => p.color === currentColor && p.size === currentSize) || product;
-      addToCart(targetProduct.id, currentQty, currentSize, currentColor, false);
+      addToCart(product.id, currentQty, product.size, currentColor, false);
       window.location.href = 'cart.html';
     });
   }
 
   document.getElementById('wa-buy-btn').addEventListener('click', () => {
-    const targetProduct = products.find(p => p.color === currentColor && p.size === currentSize) || product;
-    const msg = `Hi CRYO Team! I want to buy:\n\n• ${targetProduct.name} (${currentSize}, ${currentColor})\nQuantity: ${currentQty}\nPrice: Rs. ${targetProduct.offerPrice * currentQty}`;
+    const msg = `Hi CRYO Team! I want to buy:\n\n• ${product.name} (${product.size}, ${currentColor})\nQuantity: ${currentQty}\nPrice: Rs. ${product.offerPrice * currentQty}`;
     window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
   });
 
@@ -816,6 +785,27 @@ function initCheckoutPage() {
         payment: document.querySelector('input[name="payment"]:checked').value
       };
 
+      // Create Order Object
+      const orderRecord = {
+        customerName: details.name,
+        phone: details.phone,
+        city: details.city,
+        address: details.address,
+        notes: details.notes,
+        deliveryFee: details.deliveryFee,
+        paymentMethod: details.payment,
+        items: cart.map(i => ({ name: i.name, size: i.size, color: i.color, qty: i.qty, price: i.offerPrice })),
+        total: getCartTotal() + details.deliveryFee,
+        status: 'Pending'
+      };
+
+      // Save to Supabase
+      if (typeof supabaseClient !== 'undefined') {
+        supabaseClient.from('orders').insert([orderRecord]).then(({ error }) => {
+          if (error) console.error("Error saving order:", error);
+        });
+      }
+
       // Show success modal
       document.getElementById('success-modal').style.display = 'flex';
       
@@ -823,8 +813,7 @@ function initCheckoutPage() {
       setTimeout(() => {
         openWhatsAppCheckout(cart, details);
         clearCart();
-        window.location.href = 'index.html';
-      }, 3000);
+      }, 1500);
     });
   }
 }

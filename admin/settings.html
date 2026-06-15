@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | CRYO Admin</title>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <img src="../assets/images/cryo-logo-horizontal.png" alt="CRYO Logo">
+      </div>
+      <nav>
+        <a href="/admin/dashboard" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Dashboard
+        </a>
+        <a href="/admin/products" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+          Products
+        </a>
+        <a href="/admin/orders" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          Orders
+        </a>
+        <a href="/admin/settings" class="nav-item active">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle></svg>
+          Settings
+        </a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="topbar">
+        <h1 class="page-title">Global Settings</h1>
+        <div class="user-profile">
+          <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        <!-- Store Settings -->
+        <div class="admin-card">
+          <div class="card-header">
+            <h3>Store Configuration</h3>
+          </div>
+          <form id="settings-form">
+            <div class="form-group">
+              <label>WhatsApp Number (format: 923... without +)</label>
+              <input type="text" id="s-wa" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Standard Delivery Charge (Rs)</label>
+              <input type="number" id="s-delivery" class="form-control" required>
+            </div>
+            <button type="submit" id="save-settings-btn" class="btn-admin">Update Settings</button>
+            <p id="settings-msg" style="color:var(--admin-success); margin-top:10px; display:none;">Settings saved successfully!</p>
+          </form>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="admin-card">
+          <div class="card-header">
+            <h3>Security</h3>
+          </div>
+          <form id="password-form">
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" id="new-pwd" class="form-control" required minlength="6">
+            </div>
+            <button type="submit" id="update-pwd-btn" class="btn-admin" style="background:var(--admin-secondary);">Change Password</button>
+            <p id="pwd-msg" style="margin-top:10px; display:none;"></p>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const waInput = document.getElementById('s-wa');
+      const deliveryInput = document.getElementById('s-delivery');
+      const settingsMsg = document.getElementById('settings-msg');
+
+      // Load settings
+      try {
+        const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 'global').single();
+        if (!error && data) {
+          waInput.value = data.whatsappNumber || '';
+          deliveryInput.value = data.deliveryCharge || 200;
+        } else {
+          // Defaults if document doesn't exist
+          waInput.value = '923014138007';
+          deliveryInput.value = 200;
+        }
+      } catch (err) {
+        console.error("Error loading settings", err);
+      }
+
+      // Save settings
+      document.getElementById('settings-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('save-settings-btn');
+        btn.textContent = 'Updating...';
+        btn.disabled = true;
+
+        const { error } = await supabaseClient.from('settings').upsert({
+          id: 'global',
+          whatsappNumber: waInput.value.trim(),
+          deliveryCharge: Number(deliveryInput.value)
+        });
+
+        if (!error) {
+          settingsMsg.style.display = 'block';
+          setTimeout(() => settingsMsg.style.display = 'none', 3000);
+        } else {
+          alert("Error: " + error.message);
+        }
+
+        btn.textContent = 'Update Settings';
+        btn.disabled = false;
+      });
+
+      // Update password
+      document.getElementById('password-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pwd = document.getElementById('new-pwd').value;
+        const msg = document.getElementById('pwd-msg');
+        
+        const { error } = await supabaseClient.auth.updateUser({ password: pwd });
+        if (!error) {
+          msg.textContent = 'Password updated successfully!';
+          msg.style.color = 'var(--admin-success)';
+          msg.style.display = 'block';
+          document.getElementById('password-form').reset();
+        } else {
+          msg.textContent = error.message;
+          msg.style.color = 'var(--admin-danger)';
+          msg.style.display = 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

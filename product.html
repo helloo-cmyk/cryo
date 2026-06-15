@@ -27,7 +27,8 @@
       
       <!-- Left Column: Gallery -->
       <div class="product-gallery">
-        <div class="main-image" style="height: 480px; padding: 10px; background: #ffffff;">
+        <div class="main-image" style="height: 480px; padding: 10px; background: #ffffff; position: relative;">
+          <div id="discount-badge-el" class="discount-badge" style="display:none; font-size:16px; padding:6px 14px; top:20px; left:20px;"></div>
           <img id="main-image-el" src="" alt="CRYO Radiator Coolant" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div id="main-placeholder-el" class="placeholder green bottle-hero" style="display: none;"><span>CRYO</span></div>
         </div>
@@ -54,18 +55,8 @@
           <span class="offer-price" id="off-price"></span>
         </div>
 
-        <p class="short-desc" style="margin-bottom: 25px;">
-          CRYO Premium Engine Coolant is formulated with advanced heat-transfer technology to keep your engine running at the optimal temperature. Pre-mixed, ready to use, and designed to perform in extreme climates.
-        </p>
+        <p class="short-desc" id="product-short-desc" style="margin-bottom: 25px;"></p>
 
-        <!-- Size Selection -->
-        <div class="selector-group" style="margin-bottom: 25px;">
-          <h4>Select Size:</h4>
-          <div class="size-toggles">
-            <button class="size-toggle" data-size="1L">1 Liter</button>
-            <button class="size-toggle" data-size="4L">4 Liter</button>
-          </div>
-        </div>
 
         <!-- Quantity & Actions -->
         <div class="qty-actions" style="margin-bottom: 20px;">
@@ -94,29 +85,15 @@
       </div>
 
       <div id="tab-desc" class="tab-content active">
-        <p style="line-height: 1.8; color: var(--text-body);">
-          CRYO Premium Engine Coolant is formulated with advanced heat-transfer technology to keep your engine running at the optimal temperature. Whether you're driving in extreme summer heat or freezing winter conditions, our coolant provides unparalleled protection against boil-overs, freezing, and corrosion. Trust CRYO to extend the life of your engine and maintain peak performance.
-        </p>
+        <div id="product-long-desc" style="line-height: 1.8; color: var(--text-body);"></div>
       </div>
 
       <div id="tab-features" class="tab-content">
-        <p style="line-height: 1.8; color: var(--text-body);">
-          Our advanced formula provides a wide array of premium performance advantages:
-        </p>
-        <ul style="margin-top: 15px; padding-left: 20px; line-height: 2; color: var(--text-body); list-style-type: disc;">
-          <li>All-weather protection keeps engines running in extreme temperatures</li>
-          <li>Specially balanced chemical inhibitors prevent rust and scaling in radiators</li>
-          <li>Pre-mixed at the optimal concentration, requiring no added water</li>
-          <li>Safe for all types of metal cooling parts, hoses, and seals</li>
-        </ul>
+        <div id="product-features" style="line-height: 1.8; color: var(--text-body);"></div>
       </div>
 
       <div id="tab-specs" class="tab-content">
-        <table class="specs-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-          <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 12px; font-weight: bold; width: 250px;">Formula Type</td><td style="padding: 12px;">Pre-mixed Ready to Use</td></tr>
-          <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 12px; font-weight: bold;">Compatibility</td><td style="padding: 12px;">All Vehicle Makes and Models</td></tr>
-          <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 12px; font-weight: bold;">Lifespan</td><td style="padding: 12px;">2 Years or 40,000 KM</td></tr>
-        </table>
+        <div id="product-specs" style="line-height: 1.8; color: var(--text-body); margin-top: 10px;"></div>
       </div>
     </div>
 
@@ -131,6 +108,10 @@
 
   <site-footer></site-footer>
 
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  
   <script src="assets/js/components.js?v=6" defer></script>
   <script src="assets/js/main.js?v=6"></script>
 </body>

@@ -61,19 +61,6 @@
         </div>
       </div>
 
-      <!-- Filter by Size -->
-      <div class="filter-widget">
-        <div class="widget-header">
-          <h3>FILTER BY SIZE</h3>
-        </div>
-        <div class="widget-body">
-          <ul class="category-btn-list" id="filter-size-list">
-            <li><button type="button" class="category-btn active" data-filter="all">All Sizes</button></li>
-            <li><button type="button" class="category-btn" data-filter="1L">1 Liter</button></li>
-            <li><button type="button" class="category-btn" data-filter="4L">4 Liter</button></li>
-          </ul>
-        </div>
-      </div>
       
       <!-- Filter by Color -->
       <div class="filter-widget">
@@ -124,7 +111,7 @@
       </div>
 
       <!-- Products Grid -->
-      <div id="shop-products" class="grid grid-cols-2 gap-30">
+      <div id="shop-products" class="grid grid-cols-3 gap-30">
         <!-- Injected via main.js -->
       </div>
       
@@ -133,6 +120,10 @@
 
   <site-footer></site-footer>
 
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  
   <script src="assets/js/components.js?v=6" defer></script>
   <script src="assets/js/main.js?v=6"></script>
 </body>
