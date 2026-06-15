@@ -532,11 +532,10 @@ ul {
 }
 
 .site-header.scrolled .cart-badge {
-  width: 20px;
-  height: 20px;
-  font-size: 9px;
-  padding-top: 2px;
-  padding-right: 3px;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  padding: 0;
 }
 
 .site-header.scrolled .main-nav a {
@@ -2951,5 +2950,91 @@ footer a:hover {
   .menu-overlay.active {
     display: block;
     opacity: 1;
+  }
+}
+
+/* Custom Dropdown Styling */
+.custom-sort-dropdown {
+  position: relative;
+  width: 200px;
+  cursor: pointer;
+}
+.sort-selected {
+  background: var(--dark);
+  color: var(--white);
+  padding: 10px 15px;
+  border: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+}
+.sort-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: var(--dark);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 100;
+  display: none;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.sort-options.open {
+  display: block;
+}
+.sort-option {
+  padding: 10px 15px;
+  color: var(--white);
+  transition: background 0.3s;
+}
+.sort-option:hover, .sort-option.active {
+  background: var(--primary);
+  color: var(--white);
+}
+
+/* Mobile Sidebar Fix */
+@media (max-width: 768px) {
+  #mobile-filter-btn {
+    display: flex !important;
+    margin-right: 15px;
+  }
+  .filter-selects {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .shop-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 300px;
+    height: 100vh;
+    background: var(--white);
+    z-index: 1000;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    padding: 20px;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+  }
+  .shop-sidebar.open {
+    left: 0;
+  }
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    display: none;
+  }
+  .sidebar-overlay.active {
+    display: block;
+  }
+  .sidebar-close {
+    display: block !important;
   }
 }
