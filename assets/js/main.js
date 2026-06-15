@@ -102,12 +102,12 @@ function getCartTotal() {
 }
 
 function updateCartBadge() {
-  const badge = document.querySelector('.cart-badge');
-  if (badge) {
-    const count = getCartCount();
+  const badges = document.querySelectorAll('.cart-badge');
+  const count = getCartCount();
+  badges.forEach(badge => {
     badge.textContent = count;
     badge.style.display = count > 0 ? 'flex' : 'none';
-  }
+  });
 }
 
 function addToCart(productId, quantity, size, color, showAlert = true) {
@@ -596,7 +596,7 @@ function initProductPage() {
     buyNowBtn.addEventListener('click', () => {
       const targetProduct = products.find(p => p.color === currentColor && p.size === currentSize) || product;
       addToCart(targetProduct.id, currentQty, currentSize, currentColor, false);
-      window.location.href = 'checkout.html';
+      window.location.href = 'cart.html';
     });
   }
 
