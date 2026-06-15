@@ -839,6 +839,7 @@ ul {
 @media (max-width: 768px) {
   .hero-full {
     min-height: auto;
+    background-position: center center;
   }
 
   .hero-full-content {
@@ -2814,13 +2815,18 @@ footer a:hover {
     display: none !important;
   }
   
+  .header-actions {
+    margin-right: -20px;
+    gap: 5px;
+  }
+  
   .hamburger {
     display: flex;
     background: none;
     border: none;
     color: var(--dark);
     cursor: pointer;
-    padding: 8px;
+    padding: 8px 0 8px 8px;
     align-items: center;
     justify-content: center;
   }
