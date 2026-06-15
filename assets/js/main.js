@@ -269,6 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initCheckoutPage();
   } else if (path.includes('dealer')) {
     initDealerPage();
+  } else if (path.includes('contact')) {
+    initContactPage();
   }
 });
 
@@ -720,7 +722,29 @@ function initDealerPage() {
 
       const msg = `Hi CRYO Team! I'm interested in becoming a dealer.\n\nBusiness: ${business}\nContact: ${name}\nCity: ${city}\nType: ${type}\nMonthly Need: ${qty}\nWhatsApp: ${phone}\nAddress: ${address}\nNotes: ${notes}\n\nPlease share wholesale pricing and terms.`;
       
-      window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+      const successMsg = document.getElementById('dealer-success-msg');
+      if (successMsg) successMsg.style.display = 'block';
+      
+      setTimeout(() => {
+        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+      }, 500);
+    });
+  }
+}
+
+// --- Contact Page ---
+function initContactPage() {
+  const form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('c-msg') ? document.getElementById('c-msg').value : '';
+      const successMsg = document.getElementById('contact-success-msg');
+      if (successMsg) successMsg.style.display = 'block';
+      
+      setTimeout(() => {
+        window.location.href = 'mailto:info@cryocoolant.com?subject=Contact Inquiry&body=' + encodeURIComponent(msg);
+      }, 500);
     });
   }
 }

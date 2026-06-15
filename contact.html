@@ -112,7 +112,10 @@
         <div>
           <div class="contact-card">
             <h3>Send a Message</h3>
-            <form onsubmit="event.preventDefault(); window.location.href='mailto:info@cryocoolant.com?subject=Contact Inquiry&body=' + encodeURIComponent(document.getElementById('c-msg').value);">
+            <form id="contact-form">
+              <div id="contact-success-msg" style="display: none; background: rgba(40, 167, 69, 0.2); border: 1px solid #28A745; color: #28A745; padding: 15px; margin-bottom: 20px; text-align: center; font-family: 'Inter', sans-serif;">
+                Message generated! Redirecting to email client...
+              </div>
               <div class="form-group" style="margin-bottom: 20px;">
                 <label class="form-label" style="color: var(--white); font-weight: 600; margin-bottom: 8px; display: block;">FULL NAME</label>
                 <input type="text" class="form-control" style="background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; width: 100%;" required>
