@@ -257,17 +257,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Page specific logic
   const path = window.location.pathname;
-  if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
+  if (path.includes('index') || path === '/' || path.endsWith('/')) {
     initHomePage();
-  } else if (path.includes('shop.html')) {
+  } else if (path.includes('shop')) {
     initShopPage();
-  } else if (path.includes('product.html')) {
+  } else if (path.includes('product')) {
     initProductPage();
-  } else if (path.includes('cart.html')) {
+  } else if (path.includes('cart')) {
     renderCart();
-  } else if (path.includes('checkout.html')) {
+  } else if (path.includes('checkout')) {
     initCheckoutPage();
-  } else if (path.includes('dealer.html')) {
+  } else if (path.includes('dealer')) {
     initDealerPage();
   }
 });
