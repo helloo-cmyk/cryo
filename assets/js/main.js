@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function initHomePage() {
   const grid = document.getElementById('featured-products');
   if (grid) {
-    grid.innerHTML = products.map(p => createProductCard(p)).join('');
+    grid.innerHTML = products.slice(0, 6).map(p => createProductCard(p)).join('');
   }
 }
 
