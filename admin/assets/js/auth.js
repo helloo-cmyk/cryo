@@ -9,14 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
       // User is logged in
       if (isLoginPage) {
         // Redirect to dashboard if trying to access login page while authenticated
-        window.location.href = '/admin/dashboard';
+        window.location.href = '/admin/dashboard.html';
       } else {
         // Set up logout button functionality on protected pages
         const logoutBtn = document.getElementById('logout-btn');
         if (logoutBtn) {
           logoutBtn.addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
-            window.location.href = '/login';
+            window.location.href = '/admin/login.html';
           });
         }
       }
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // User is NOT logged in
       if (!isLoginPage) {
         // Redirect to login if trying to access a protected page
-        window.location.href = '/login';
+        window.location.href = '/admin/login.html';
       } else {
         // Handle login logic on the login page
         const loginForm = document.getElementById('login-form');
