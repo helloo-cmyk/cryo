@@ -371,19 +371,20 @@ ul {
 
 .cart-badge {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 4px;
+  right: 4px;
   width: 18px;
   height: 18px;
   background: var(--primary);
   color: var(--white);
   font-size: 11px;
   font-weight: bold;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   padding: 0;
+  line-height: 1;
 }
 
 .action-box:hover .cart-badge {
@@ -2993,6 +2994,11 @@ footer a:hover {
 .sort-option:hover, .sort-option.active {
   background: var(--primary);
   color: var(--white);
+}
+
+/* Custom Dropdown Styling */
+#mobile-filter-btn {
+  display: none;
 }
 
 /* Mobile Sidebar Fix */

@@ -62,7 +62,7 @@ class HeaderComponent extends HTMLElement {
             <div class="header-actions">
               <a href="cart.html" class="action-box">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                <span class="cart-badge" id="cart-badge"><span>0</span></span>
+                <span class="cart-badge" id="cart-badge">0</span>
               </a>
               <button class="action-box search-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>

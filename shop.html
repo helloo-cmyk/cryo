@@ -10,7 +10,8 @@
 <body>
 
   <site-header></site-header>
-
+  <main>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
   <!-- Page Banner -->
   <section class="page-banner shop-banner">
     <div class="container">
@@ -25,7 +26,9 @@
   <section class="container shop-container">
     
     <!-- Sidebar -->
-    <aside class="shop-sidebar">
+    <aside class="shop-sidebar" id="shop-sidebar">
+      <button class="sidebar-close" id="sidebar-close" style="display:none; position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; color: var(--dark); z-index: 10;">&times;</button>
+      
       <!-- Search Product -->
       <div class="filter-widget">
         <div class="widget-header">
@@ -98,15 +101,21 @@
           Showing 1–8 of 15 results
         </div>
         <div class="filter-selects">
-          <div class="custom-sort-dropdown">
-            <select id="filter-sort">
-              <option value="default">Default sorting</option>
-              <option value="low-high">Price: Low to High</option>
-              <option value="high-low">Price: High to Low</option>
-            </select>
-            <div class="dropdown-icon">
+          <button id="mobile-filter-btn" class="btn" style="padding: 8px 15px; font-size: 14px; gap: 8px; align-items: center; background: transparent; border: 1px solid var(--border); color: var(--dark);">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+            Filters
+          </button>
+          <div class="custom-sort-dropdown" id="custom-sort-wrapper">
+            <div class="sort-selected" id="sort-selected">
+              <span>Default sorting</span>
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
+            <div class="sort-options" id="sort-options">
+              <div class="sort-option active" data-value="default">Default sorting</div>
+              <div class="sort-option" data-value="low-high">Price: Low to High</div>
+              <div class="sort-option" data-value="high-low">Price: High to Low</div>
+            </div>
+            <input type="hidden" id="filter-sort" value="default">
           </div>
           <!-- Hidden filters for backwards compat with JS if needed -->
           <select id="filter-size" style="display:none;"><option value="all">All</option></select>
