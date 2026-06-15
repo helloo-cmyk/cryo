@@ -10,3 +10,4 @@
 /admin/orders /admin/orders.html 200
 /admin/settings /admin/settings.html 200
 /admin/seed /admin/seed.html 200
+/admin /admin/login.html 200
