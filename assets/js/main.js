@@ -300,6 +300,32 @@ document.addEventListener('DOMContentLoaded', () => {
     closeMenu.addEventListener('click', () => mobileNav.classList.remove('open'));
   }
 
+  // Global Header Search functionality
+  document.querySelectorAll('.mobile-search').forEach(searchContainer => {
+    const input = searchContainer.querySelector('input');
+    const svgBtn = searchContainer.querySelector('svg');
+    const doSearch = () => {
+      if (input && input.value.trim() !== '') {
+        window.location.href = `shop.html?q=${encodeURIComponent(input.value.trim())}`;
+      }
+    };
+    if (input) {
+      input.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') doSearch();
+      });
+    }
+    if (svgBtn) {
+      svgBtn.addEventListener('click', doSearch);
+      svgBtn.style.cursor = 'pointer';
+    }
+  });
+
+  document.querySelectorAll('.search-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.location.href = 'shop.html?focus=search';
+    });
+  });
+
   // Initialize Cart Badge
   updateCartBadge();
 
@@ -364,6 +390,23 @@ function initShopPage() {
   const priceMin = document.getElementById('price-min');
   const priceMax = document.getElementById('price-max');
   const priceFilterBtn = document.getElementById('price-filter-btn');
+  
+  // Handle URL parameters for global search
+  const urlParams = new URLSearchParams(window.location.search);
+  const qParam = urlParams.get('q');
+  const focusParam = urlParams.get('focus');
+  
+  if (qParam && searchInput) {
+    searchInput.value = qParam;
+  }
+  
+  if (focusParam === 'search' && searchInput) {
+    const filterBtn = document.getElementById('mobile-filter-btn');
+    if (filterBtn && window.innerWidth <= 768) {
+      filterBtn.click();
+    }
+    setTimeout(() => searchInput.focus(), 500);
+  }
   
   let currentSize = 'all';
   let currentColor = 'all';
