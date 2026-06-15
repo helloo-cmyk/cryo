@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | CRYO Radiator Coolant</title>
+  <meta name="description" content="Explore details for CRYO Premium Radiator Coolant. Select your preferred size for ultimate engine cooling.">
+  <link rel="stylesheet" href="assets/css/style.css?v=1781428773.27416">
+</head>
+<body>
+
+  <site-header></site-header>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <div class="container">
+      <h1 class="page-title">Product Details</h1>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> &gt; <a href="shop.html">Shop</a> &gt; <span style="color: var(--white);" id="product-title-breadcrumb">Product Details</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Details Section -->
+  <section class="container product-detail-section">
+    <div class="product-detail-grid">
+      
+      <!-- Left Column: Gallery -->
+      <div class="product-gallery">
+        <div class="main-image" style="height: 480px; padding: 10px; background: #ffffff;">
+          <img id="main-image-el" src="" alt="CRYO Radiator Coolant" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div id="main-placeholder-el" class="placeholder green bottle-hero" style="display: none;"><span>CRYO</span></div>
+        </div>
+        
+        <!-- Thumbnails (Dynamically injected by main.js) -->
+        <div class="thumbnail-row"></div>
+      </div>
+
+      <!-- Right Column: Product Info -->
+      <div class="product-info-detail">
+        <h1 id="product-title" style="font-family: 'Barlow', sans-serif; font-weight: 800; font-size: 36px; text-transform: uppercase; margin-bottom: 15px; color: var(--dark);"></h1>
+        
+        <div class="product-rating" style="margin-bottom: 20px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span style="color: var(--text-muted); margin-left: 10px; font-weight: 600;">5.0 (128 reviews)</span>
+        </div>
+
+        <div class="price-section" style="margin-bottom: 25px;">
+          <span class="regular-price" id="reg-price"></span>
+          <span class="offer-price" id="off-price"></span>
+        </div>
+
+        <p class="short-desc" style="margin-bottom: 25px;">
+          CRYO Premium Engine Coolant is formulated with advanced heat-transfer technology to keep your engine running at the optimal temperature. Pre-mixed, ready to use, and designed to perform in extreme climates.
+        </p>
+
+        <!-- Size Selection -->
+        <div class="selector-group" style="margin-bottom: 25px;">
+          <h4>Select Size:</h4>
+          <div class="size-toggles">
+            <button class="size-toggle" data-size="1L">1 Liter</button>
+            <button class="size-toggle" data-size="4L">4 Liter</button>
+          </div>
+        </div>
+
+        <!-- Quantity & Actions -->
+        <div class="qty-actions" style="margin-bottom: 20px;">
+          <div class="qty-selector">
+            <button class="qty-btn" id="qty-minus">−</button>
+            <input type="text" class="qty-input" id="qty-input" value="1" readonly>
+            <button class="qty-btn" id="qty-plus">+</button>
+          </div>
+          <button class="btn btn-outline-dark" id="add-to-cart-btn" style="flex: 1;">ADD TO CART</button>
+          <button class="btn btn-primary" id="buy-now-btn" style="flex: 1;">BUY NOW</button>
+        </div>
+
+        <button class="btn btn-whatsapp btn-wa-buy" id="wa-buy-btn" style="margin-bottom: 0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block; vertical-align:middle; margin-right:8px;"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.09-1.597l.363.215c1.64.974 3.537 1.488 5.495 1.489 5.86 0 10.627-4.767 10.63-10.629.002-2.84-1.102-5.511-3.11-7.52-2.009-2.01-4.682-3.115-7.525-3.116-5.862 0-10.63 4.767-10.633 10.63-.001 2.064.54 4.074 1.566 5.84l.235.404-1.036 3.784 3.87-1.012z"/></svg>
+          ORDER VIA WHATSAPP
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs Container -->
+    <div class="tabs-section" style="padding: 20px 0;">
+      <div class="tabs-header" style="margin-bottom: 20px;">
+        <button class="tab-btn active" data-tab="tab-desc">Description</button>
+        <button class="tab-btn" data-tab="tab-features">Features</button>
+        <button class="tab-btn" data-tab="tab-specs">Specifications</button>
+      </div>
+
+      <div id="tab-desc" class="tab-content active">
+        <p style="line-height: 1.8; color: var(--text-body);">
+          CRYO Premium Engine Coolant is formulated with advanced heat-transfer technology to keep your engine running at the optimal temperature. Whether you're driving in extreme summer heat or freezing winter conditions, our coolant provides unparalleled protection against boil-overs, freezing, and corrosion. Trust CRYO to extend the life of your engine and maintain peak performance.
+        </p>
+      </div>
+
+      <div id="tab-features" class="tab-content">
+        <p style="line-height: 1.8; color: var(--text-body);">
+          Our advanced formula provides a wide array of premium performance advantages:
+        </p>
+        <ul style="margin-top: 15px; padding-left: 20px; line-height: 2; color: var(--text-body); list-style-type: disc;">
+          <li>All-weather protection keeps engines running in extreme temperatures</li>
+          <li>Specially balanced chemical inhibitors prevent rust and scaling in radiators</li>
+          <li>Pre-mixed at the optimal concentration, requiring no added water</li>
+          <li>Safe for all types of metal cooling parts, hoses, and seals</li>
+        </ul>
+      </div>
+
+      <div id="tab-specs" class="tab-content">
+        <table class="specs-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+          <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 12px; font-weight: bold; width: 250px;">Formula Type</td><td style="padding: 12px;">Pre-mixed Ready to Use</td></tr>
+          <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 12px; font-weight: bold;">Compatibility</td><td style="padding: 12px;">All Vehicle Makes and Models</td></tr>
+          <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 12px; font-weight: bold;">Lifespan</td><td style="padding: 12px;">2 Years or 40,000 KM</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    <div style="margin-top: 50px;">
+      <h3 style="font-family: 'Barlow', sans-serif; font-weight: 800; font-size: 28px; text-transform: uppercase; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; color: var(--dark);">Related Products</h3>
+      <div id="related-products" class="grid grid-cols-3 gap-30">
+        <!-- Injected via main.js -->
+      </div>
+    </div>
+  </section>
+
+  <site-footer></site-footer>
+
+  <script src="assets/js/components.js" defer></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

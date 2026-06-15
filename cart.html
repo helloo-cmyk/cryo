@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart | CRYO Radiator Coolant</title>
+  <meta name="description" content="Review your CRYO Radiator Coolant products in the shopping cart.">
+  <link rel="stylesheet" href="assets/css/style.css?v=1781428773.16843">
+</head>
+<body>
+
+  <site-header></site-header>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <div class="container">
+      <h1>Your Cart</h1>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> > Cart
+      </div>
+    </div>
+  </section>
+
+  <!-- Cart Section -->
+  <section class="container cart-layout">
+    
+    <!-- Left: Cart Items -->
+    <div>
+      <div id="cart-empty" style="display: none; text-align: center; padding: 60px 20px; background: var(--light-grey); border-radius: 12px;">
+        <h2 style="margin-bottom: 20px;">Your cart is empty</h2>
+        <p style="margin-bottom: 30px; color: var(--text-muted);">Looks like you haven't added any products to your cart yet.</p>
+        <a href="shop.html" class="btn btn-primary">Shop Now</a>
+      </div>
+
+      <table class="cart-table" id="cart-table" style="display: none;">
+        <thead>
+          <tr>
+            <th>Product Details</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="cart-tbody">
+          <!-- Injected via main.js -->
+        </tbody>
+      </table>
+      <div style="margin-top: 20px;">
+        <a href="shop.html" style="color: var(--primary); font-weight: 600;">← Continue Shopping</a>
+      </div>
+    </div>
+
+    <!-- Right: Order Summary -->
+    <div>
+      <div class="order-summary" id="cart-summary" style="display: none;">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="cart-subtotal">Rs. 0</span>
+        </div>
+        <div class="summary-row" style="color: var(--success); font-weight: bold;">
+          <span>Discount (15% OFF):</span>
+          <span>Applied to items</span>
+        </div>
+        <div class="summary-total summary-row">
+          <span>Total:</span>
+          <span id="cart-total">Rs. 0</span>
+        </div>
+        <div class="summary-actions">
+          <a href="checkout.html" class="btn btn-primary w-full text-center">Proceed to Checkout</a>
+          <button id="cart-wa-btn" class="btn btn-whatsapp w-full">Order via WhatsApp</button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <site-footer></site-footer>
+
+  <script src="assets/js/components.js" defer></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

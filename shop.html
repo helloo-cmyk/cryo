@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop | CRYO Radiator Coolant</title>
+  <meta name="description" content="Shop CRYO Radiator Coolant products online. Available in 1L and 4L in Green, Red, and Blue.">
+  <link rel="stylesheet" href="assets/css/style.css?v=2">
+</head>
+<body>
+
+  <site-header></site-header>
+
+  <!-- Page Banner -->
+  <section class="page-banner shop-banner">
+    <div class="container">
+      <h1>Our Products</h1>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> > Shop
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop Section -->
+  <section class="container shop-container">
+    
+    <!-- Sidebar -->
+    <aside class="shop-sidebar">
+      <!-- Search Product -->
+      <div class="filter-widget">
+        <div class="widget-header">
+          <h3>SEARCH PRODUCT</h3>
+        </div>
+        <div class="widget-body">
+          <div class="search-box-custom">
+            <input type="text" id="search-input" placeholder="Search products...">
+            <button type="button" id="search-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Price -->
+      <div class="filter-widget">
+        <div class="widget-header">
+          <h3>FILTER PRICE</h3>
+        </div>
+        <div class="widget-body">
+          <div class="price-slider-custom">
+            <div class="slider-track-bg"></div>
+            <div class="slider-track-fill" id="slider-track"></div>
+            <input type="range" min="500" max="8000" value="500" id="price-min" class="range-slider">
+            <input type="range" min="500" max="8000" value="8000" id="price-max" class="range-slider">
+          </div>
+          <div class="price-filter-controls">
+            <span class="price-text">PRICE: <span id="price-min-val" class="price-val">Rs. 500</span> &ndash; <span id="price-max-val" class="price-val">Rs. 8,000</span></span>
+            <button type="button" class="btn-filter-text" id="price-filter-btn">FILTER</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter by Size -->
+      <div class="filter-widget">
+        <div class="widget-header">
+          <h3>FILTER BY SIZE</h3>
+        </div>
+        <div class="widget-body">
+          <ul class="category-btn-list" id="filter-size-list">
+            <li><button type="button" class="category-btn active" data-filter="all">All Sizes</button></li>
+            <li><button type="button" class="category-btn" data-filter="1L">1 Liter</button></li>
+            <li><button type="button" class="category-btn" data-filter="4L">4 Liter</button></li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Filter by Color -->
+      <div class="filter-widget">
+        <div class="widget-header">
+          <h3>FILTER BY COLOR</h3>
+        </div>
+        <div class="widget-body">
+          <ul class="category-btn-list" id="filter-color-list">
+            <li><button type="button" class="category-btn active" data-filter="all">All Colors</button></li>
+            <li><button type="button" class="category-btn" data-filter="green">Green</button></li>
+            <li><button type="button" class="category-btn" data-filter="red">Red</button></li>
+            <li><button type="button" class="category-btn" data-filter="blue">Blue</button></li>
+          </ul>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <div class="shop-content">
+      
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-results">
+          Showing 1–8 of 15 results
+        </div>
+        <div class="filter-selects">
+          <div class="custom-sort-dropdown">
+            <select id="filter-sort">
+              <option value="default">Default sorting</option>
+              <option value="low-high">Price: Low to High</option>
+              <option value="high-low">Price: High to Low</option>
+            </select>
+            <div class="dropdown-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          <!-- Hidden filters for backwards compat with JS if needed -->
+          <select id="filter-size" style="display:none;"><option value="all">All</option></select>
+          <select id="filter-color" style="display:none;"><option value="all">All</option></select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="shop-products" class="grid grid-cols-2 gap-30">
+        <!-- Injected via main.js -->
+      </div>
+      
+    </div>
+  </section>
+
+  <site-footer></site-footer>
+
+  <script src="assets/js/components.js" defer></script>
+  <script src="assets/js/main.js?v=2"></script>
+</body>
+</html>

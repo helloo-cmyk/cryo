@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | CRYO Radiator Coolant</title>
+  
+  <link rel="stylesheet" href="assets/css/style.css?v=1781428773.1968">
+  
+  <script src="assets/js/components.js" defer></script>
+
+  <style>
+    .contact-card {
+      background: #111;
+      padding: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--primary);
+    }
+    .contact-card h3 {
+      color: var(--white);
+      margin-bottom: 20px;
+      font-family: 'Barlow', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .contact-info-list {
+      list-style: none;
+      padding: 0; margin: 0;
+    }
+    .contact-info-list li {
+      margin-bottom: 15px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+    }
+    .contact-info-list li strong {
+      color: var(--white);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    .contact-info-list a {
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+    .contact-info-list a:hover {
+      color: var(--primary);
+    }
+    .map-container {
+      height: 350px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      filter: grayscale(100%) invert(90%) contrast(85%);
+      transition: filter 0.5s ease;
+    }
+    .map-container:hover {
+      filter: none;
+    }
+  </style>
+</head>
+<body>
+
+  <site-header></site-header>
+
+  <main>
+    <!-- Page Banner -->
+    <section class="page-banner contact-banner">
+      <div class="container">
+        <h1>Contact Us</h1>
+        <div class="breadcrumb">
+          <a href="index.html">Home</a> > Contact
+        </div>
+      </div>
+    </section>
+
+    <section class="container" style="padding: 80px 0;">
+      <div class="grid grid-cols-2 gap-30">
+        
+        <!-- Contact Details -->
+        <div>
+          <div class="contact-card" style="margin-bottom: 30px;">
+            <h3>Get in Touch</h3>
+            <ul class="contact-info-list">
+              <li><strong>Phone</strong> <a href="tel:03014138007">0301-4138007</a></li>
+              <li><strong>WhatsApp</strong> <a href="https://wa.me/923014138007">0301-4138007</a></li>
+              <li><strong>Email</strong> <a href="mailto:info@cryocoolant.com">info@cryocoolant.com</a></li>
+              <li><strong>Headquarters</strong> LMQ Rd, opp. RTO,<br> Nawan Shehr, Multan, 60000</li>
+            </ul>
+          </div>
+          
+          <div class="map-container">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13788.196568285973!2d71.4688947!3d30.1994119!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x393b342fb2f87a8b%3A0x6b13cf3e3b392a!2sNawan%20Shehr%2C%20Multan!5e0!3m2!1sen!2s!4v1690000000000!5m2!1sen!2s" 
+              width="100%" 
+              height="100%" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div>
+          <div class="contact-card">
+            <h3>Send a Message</h3>
+            <form onsubmit="event.preventDefault(); window.location.href='mailto:info@cryocoolant.com?subject=Contact Inquiry&body=' + encodeURIComponent(document.getElementById('c-msg').value);">
+              <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label" style="color: var(--white); font-weight: 600; margin-bottom: 8px; display: block;">FULL NAME</label>
+                <input type="text" class="form-control" style="background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; width: 100%;" required>
+              </div>
+              <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label" style="color: var(--white); font-weight: 600; margin-bottom: 8px; display: block;">EMAIL / PHONE</label>
+                <input type="text" class="form-control" style="background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; width: 100%;" required>
+              </div>
+              <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label" style="color: var(--white); font-weight: 600; margin-bottom: 8px; display: block;">MESSAGE</label>
+                <textarea id="c-msg" class="form-control" rows="6" style="background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; width: 100%;" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-red" style="width: 100%; padding: 15px; font-size: 16px;">TRANSMIT MESSAGE</button>
+            </form>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+  </main>
+
+  <site-footer></site-footer>
+
+</body>
+</html>
