@@ -2058,6 +2058,13 @@ footer a:hover {
   border-bottom: 1px solid var(--border);
   margin-bottom: 30px;
   overflow-x: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.tabs-header::-webkit-scrollbar {
+  display: none;
 }
 
 .tab-btn {
