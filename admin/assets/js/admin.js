@@ -209,7 +209,8 @@ window.editProduct = async function(id) {
 };
 
 window.duplicateProduct = async function(id) {
-  if (confirm("Are you sure you want to duplicate this product?")) {
+  const confirmed = await customConfirm("Are you sure you want to duplicate this product?");
+  if (confirmed) {
     try {
       const { data: doc, error } = await supabaseClient.from('products').select('*').eq('id', id).single();
       if (error) throw error;
@@ -232,7 +233,8 @@ window.duplicateProduct = async function(id) {
 };
 
 window.deleteProduct = async function(id) {
-  if (confirm("Are you sure you want to delete this product? This cannot be undone.")) {
+  const confirmed = await customConfirm("Are you sure you want to delete this product? This cannot be undone.");
+  if (confirmed) {
     try {
       const { error } = await supabaseClient.from('products').delete().eq('id', id);
       if (error) throw error;
@@ -263,8 +265,8 @@ async function loadOrders() {
 
     tbody.innerHTML = orders.map(order => {
       const dateStr = order.created_at ? new Date(order.created_at).toLocaleString() : 'N/A';
-      const itemsStr = order.items ? order.items.map(i => `${i.qty}x ${i.name} (${i.size})`).join(', ') : '';
-      const itemsHtml = order.items ? order.items.map(i => `${i.qty}x ${i.name} (${i.size})`).join('<br>') : '';
+      const itemsStr = order.items ? order.items.map(i => `${i.qty}x ${i.name} (Size: ${i.size}, Color: ${i.color ? i.color.toUpperCase() : 'N/A'})`).join(' | ') : '';
+      const itemsHtml = order.items ? order.items.map(i => `<strong style="font-size:14px;">${i.qty}x ${i.name}</strong><br><span style="color:#bbb; font-size:13px; display:inline-block; margin-top:4px;">Size: <strong>${i.size}</strong><br>Color: <strong>${i.color ? i.color.toUpperCase() : 'N/A'}</strong></span>`).join('<div style="margin-bottom:12px;"></div>') : '';
       
       csvData.push([
         order.id, 
@@ -277,8 +279,22 @@ async function loadOrders() {
         order.status
       ]);
 
+      const itemsHtmlDetailed = order.items ? order.items.map(i => {
+        const itemPrice = i.offerPrice || i.price || i.regularPrice || 0;
+        return `<li style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                  <div>
+                    <strong style="font-size: 15px;">${i.qty}x ${i.name}</strong><br>
+                    <span style="font-size: 14px; color: #bbb; display: inline-block; margin-top: 6px; line-height: 1.6;">
+                      Size: <strong>${i.size}</strong><br>
+                      Color: <strong>${i.color ? i.color.toUpperCase() : 'N/A'}</strong><br>
+                      Price: <strong style="color: white;">Rs. ${itemPrice * i.qty}</strong>
+                    </span>
+                  </div>
+                </li>`;
+      }).join('') : 'No items';
+
       return `
-        <tr>
+        <tr class="order-main-row">
           <td>#${String(order.id).substring(0,8).toUpperCase()}</td>
           <td>
             <strong>${order.customerName || 'Unknown'}</strong><br>
@@ -295,7 +311,34 @@ async function loadOrders() {
               <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
             </select>
           </td>
-          <td><button class="btn-sm" style="background:var(--admin-danger);" onclick="deleteOrder('${order.id}')">Delete</button></td>
+          <td>
+            <div style="display:flex; gap:8px;">
+              <button class="btn-sm" style="background:#0D47A1;" onclick="toggleOrderDetails('${order.id}')">View</button>
+              <button class="btn-sm" style="background:var(--admin-danger);" onclick="deleteOrder('${order.id}')">Delete</button>
+            </div>
+          </td>
+        </tr>
+        <tr id="details-${order.id}" style="display:none; background-color: rgba(255,255,255,0.03);">
+          <td colspan="7" style="padding: 20px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 30px;">
+              <div style="flex: 1; min-width: 250px;">
+                <h4 style="color:var(--admin-primary); margin-bottom:10px;">Customer Details</h4>
+                <p style="margin-bottom:5px;"><strong>Name:</strong> ${order.customerName || 'N/A'}</p>
+                <p style="margin-bottom:5px;"><strong>Phone:</strong> ${order.phone || 'N/A'}</p>
+                <p style="margin-bottom:5px;"><strong>City:</strong> ${order.city || 'N/A'}</p>
+                <p style="margin-bottom:5px;"><strong>Address:</strong> ${order.address || 'N/A'}</p>
+              </div>
+              <div style="flex: 1; min-width: 250px;">
+                <h4 style="color:var(--admin-primary); margin-bottom:10px;">Order Summary</h4>
+                <ul style="margin-left: 20px; margin-bottom: 10px; line-height: 1.6;">
+                  ${itemsHtmlDetailed}
+                </ul>
+                <p style="margin-bottom:5px;"><strong>Delivery Method:</strong> ${order.deliveryMethod ? order.deliveryMethod : (order.deliveryFee === 350 ? 'Express Delivery' : (order.deliveryFee === 0 ? 'Self Pickup / Free' : 'Standard Delivery'))}</p>
+                <p style="margin-bottom:5px;"><strong>Payment Method:</strong> ${order.paymentMethod || 'Cash on Delivery (COD)'}</p>
+                <p style="font-size: 16px; margin-top:10px;"><strong>Total Amount: Rs. ${order.total}</strong></p>
+              </div>
+            </div>
+          </td>
         </tr>
       `;
     }).join('');
@@ -329,7 +372,8 @@ window.updateOrderStatus = async function(id, newStatus) {
 };
 
 window.deleteOrder = async function(id) {
-  if(confirm("Are you sure you want to delete this order?")) {
+  const confirmed = await customConfirm("Are you sure you want to delete this order? This cannot be undone.");
+  if(confirmed) {
     try {
       const { error } = await supabaseClient.from('orders').delete().eq('id', id);
       if (error) throw error;
@@ -341,4 +385,88 @@ window.deleteOrder = async function(id) {
       alert("Error deleting order: " + err.message);
     }
   }
+};
+
+window.toggleOrderDetails = function(id) {
+  const detailsRow = document.getElementById(`details-${id}`);
+  if (detailsRow) {
+    if (detailsRow.style.display === 'none') {
+      detailsRow.style.display = 'table-row';
+    } else {
+      detailsRow.style.display = 'none';
+    }
+  }
+};
+
+window.customConfirm = function(message) {
+  return new Promise((resolve) => {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay active';
+    overlay.style.zIndex = '9999';
+
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'modal-content';
+    modal.style.maxWidth = '400px';
+    modal.style.textAlign = 'center';
+    modal.style.padding = '35px 25px';
+    modal.style.background = '#1a1a1a';
+    modal.style.borderRadius = '12px';
+
+    // Header
+    const header = document.createElement('h3');
+    header.style.color = 'var(--white)';
+    header.style.marginBottom = '15px';
+    header.style.fontFamily = "'Barlow', sans-serif";
+    header.style.textTransform = "uppercase";
+    header.style.letterSpacing = "1px";
+    header.textContent = 'Please Confirm';
+
+    // Message
+    const msg = document.createElement('p');
+    msg.style.color = '#ccc';
+    msg.style.marginBottom = '25px';
+    msg.style.lineHeight = '1.6';
+    msg.style.fontSize = '15px';
+    msg.textContent = message;
+
+    // Buttons Container
+    const btnContainer = document.createElement('div');
+    btnContainer.style.display = 'flex';
+    btnContainer.style.gap = '15px';
+    btnContainer.style.justifyContent = 'center';
+
+    const baseBtnStyle = 'padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; outline: none; transition: all 0.3s ease;';
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.style.cssText = baseBtnStyle + ' background: transparent; border: 1px solid #555; color: #fff;';
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.onmouseover = () => cancelBtn.style.background = 'rgba(255,255,255,0.1)';
+    cancelBtn.onmouseout = () => cancelBtn.style.background = 'transparent';
+
+    const confirmBtn = document.createElement('button');
+    confirmBtn.style.cssText = baseBtnStyle + ' background: #E53935; border: 1px solid #E53935; color: #fff;';
+    confirmBtn.textContent = 'Yes, Proceed';
+    confirmBtn.onmouseover = () => confirmBtn.style.background = '#d32f2f';
+    confirmBtn.onmouseout = () => confirmBtn.style.background = '#E53935';
+
+    btnContainer.appendChild(cancelBtn);
+    btnContainer.appendChild(confirmBtn);
+
+    modal.appendChild(header);
+    modal.appendChild(msg);
+    modal.appendChild(btnContainer);
+    overlay.appendChild(modal);
+
+    document.body.appendChild(overlay);
+
+    const closeModal = (result) => {
+      document.body.removeChild(overlay);
+      resolve(result);
+    };
+
+    cancelBtn.addEventListener('click', () => closeModal(false));
+    confirmBtn.addEventListener('click', () => closeModal(true));
+  });
 };

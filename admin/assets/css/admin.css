@@ -239,9 +239,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .stat-info h2 {
-  font-size: 24px;
+  font-size: 22px;
   color: var(--admin-text-main);
   margin-top: 5px;
+  white-space: nowrap;
 }
 
 /* Tables */

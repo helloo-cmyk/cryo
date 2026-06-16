@@ -55,9 +55,19 @@
               <label>WhatsApp Number (format: 923... without +)</label>
               <input type="text" id="s-wa" class="form-control" required>
             </div>
-            <div class="form-group">
-              <label>Standard Delivery Charge (Rs)</label>
-              <input type="number" id="s-delivery" class="form-control" required>
+            <div style="display:flex; gap:15px;">
+              <div class="form-group" style="flex:1;">
+                <label>Standard Delivery Charge (Rs)</label>
+                <select id="s-delivery-type" class="form-control" style="margin-bottom: 8px;">
+                  <option value="custom">Custom Amount</option>
+                  <option value="free">Free Delivery</option>
+                </select>
+                <input type="number" id="s-delivery" class="form-control" required placeholder="Amount">
+              </div>
+              <div class="form-group" style="flex:1;">
+                <label>Express Delivery Charge (Rs)</label>
+                <input type="number" id="s-express-delivery" class="form-control" required placeholder="Amount">
+              </div>
             </div>
             <button type="submit" id="save-settings-btn" class="btn-admin">Update Settings</button>
             <p id="settings-msg" style="color:var(--admin-success); margin-top:10px; display:none;">Settings saved successfully!</p>
@@ -87,20 +97,51 @@
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       const waInput = document.getElementById('s-wa');
+      const deliveryType = document.getElementById('s-delivery-type');
       const deliveryInput = document.getElementById('s-delivery');
+      const expressDeliveryInput = document.getElementById('s-express-delivery');
       const settingsMsg = document.getElementById('settings-msg');
+
+      function handleTypeChange(typeEl, inputEl) {
+        if (typeEl.value === 'free') {
+          inputEl.style.display = 'none';
+          inputEl.removeAttribute('required');
+        } else {
+          inputEl.style.display = 'block';
+          inputEl.setAttribute('required', 'true');
+        }
+      }
+
+      deliveryType.addEventListener('change', () => handleTypeChange(deliveryType, deliveryInput));
+
 
       // Load settings
       try {
         const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 'global').single();
         if (!error && data) {
           waInput.value = data.whatsappNumber || '';
-          deliveryInput.value = data.deliveryCharge || 200;
+          
+          let fetchedDelivery = Number(data.deliveryCharge);
+          if (isNaN(fetchedDelivery)) fetchedDelivery = 200;
+
+          if (fetchedDelivery === 0 && data.deliveryCharge !== null) {
+            deliveryType.value = 'free';
+            deliveryInput.value = 0;
+          } else {
+            deliveryType.value = 'custom';
+            deliveryInput.value = fetchedDelivery;
+          }
+
+          expressDeliveryInput.value = data.expressDeliveryCharge || 350;
         } else {
           // Defaults if document doesn't exist
           waInput.value = '923014138007';
+          deliveryType.value = 'custom';
           deliveryInput.value = 200;
+          expressDeliveryInput.value = 350;
         }
+        
+        handleTypeChange(deliveryType, deliveryInput);
       } catch (err) {
         console.error("Error loading settings", err);
       }
@@ -112,10 +153,21 @@
         btn.textContent = 'Updating...';
         btn.disabled = true;
 
+        if (deliveryType.value === 'custom' && deliveryInput.value.trim() === '') {
+          alert('Please enter a custom delivery amount for Standard Delivery.');
+          btn.textContent = 'Update Settings';
+          btn.disabled = false;
+          return;
+        }
+
+        const stdCharge = deliveryType.value === 'free' ? 0 : Number(deliveryInput.value);
+        const expCharge = Number(expressDeliveryInput.value);
+
         const { error } = await supabaseClient.from('settings').upsert({
           id: 'global',
           whatsappNumber: waInput.value.trim(),
-          deliveryCharge: Number(deliveryInput.value)
+          deliveryCharge: stdCharge,
+          expressDeliveryCharge: expCharge
         });
 
         if (!error) {

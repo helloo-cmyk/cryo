@@ -2,6 +2,7 @@
 let products = [];
 let waNumber = '923014138007';
 let defaultDeliveryFee = 200;
+let expressDeliveryFee = 350;
 
 // Function to fetch data from Supabase before initializing the app
 async function fetchSupabaseData() {
@@ -11,7 +12,12 @@ async function fetchSupabaseData() {
       const { data: settingsData, error: settingsError } = await supabaseClient.from('settings').select('*').eq('id', 'global').single();
       if (!settingsError && settingsData) {
         if (settingsData.whatsappNumber) waNumber = settingsData.whatsappNumber;
-        if (settingsData.deliveryCharge) defaultDeliveryFee = settingsData.deliveryCharge;
+        if (settingsData.deliveryCharge !== undefined && settingsData.deliveryCharge !== null) {
+          defaultDeliveryFee = settingsData.deliveryCharge;
+        }
+        if (settingsData.expressDeliveryCharge !== undefined && settingsData.expressDeliveryCharge !== null) {
+          expressDeliveryFee = settingsData.expressDeliveryCharge;
+        }
       }
 
       // Fetch products
@@ -26,10 +32,43 @@ async function fetchSupabaseData() {
             regularPrice: data.regularPrice || 0,
             offerPrice: data.offerPrice || 0,
             imageUrl: data.imageUrl || '../assets/images/placeholder.png',
-            shortDescription: data.shortDescription || '',
-            longDescription: data.longDescription || '',
-            features: data.features || '',
-            specifications: data.specifications || '',
+            shortDescription: data.shortDescription || 'CRYO Premium Radiator Coolant provides ultimate protection against overheating and corrosion. Engineered for extreme climates, it ensures your engine runs smoother and lasts longer.',
+            longDescription: data.longDescription || 'CRYO Premium Radiator Coolant is a technologically advanced thermal management solution designed to protect your vehicle\'s engine from the most extreme temperature fluctuations. Whether you are navigating through scorching summer traffic or operating heavy-duty industrial machinery, CRYO maintains optimal engine temperatures to prevent boiling over and thermal breakdown.<br><br>Formulated with an exclusive anti-rust and anti-corrosion additive package, it forms a protective shield inside your radiator, water pump, and engine block. This prevents the buildup of harmful scale and rust that can lead to costly repairs. CRYO is pre-mixed and ready to use, offering a hassle-free, pour-and-go experience that guarantees long-lasting performance and peak engine efficiency.',
+            features: data.features || `<ul class="benefits-list" style="margin-top: 10px;">
+  <li style="margin-bottom: 10px;"><strong>Advanced Heat Transfer:</strong> Maximizes engine cooling efficiency even under heavy loads.</li>
+  <li style="margin-bottom: 10px;"><strong>Anti-Corrosion Formula:</strong> Protects metal parts, including aluminum, brass, and copper, from rust and scaling.</li>
+  <li style="margin-bottom: 10px;"><strong>Ready to Use:</strong> Pre-diluted with deionized water for immediate pour-and-go application. No mixing required.</li>
+  <li style="margin-bottom: 10px;"><strong>Universal Compatibility:</strong> Safe for use in all passenger cars, commercial trucks, and industrial generators.</li>
+  <li style="margin-bottom: 10px;"><strong>Long-Life Protection:</strong> Engineered to last up to 2 years or 40,000 kilometers under normal driving conditions.</li>
+</ul>`,
+            specifications: data.specifications || `<table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+  <tbody>
+    <tr style="border-bottom: 1px solid #eee;">
+      <td style="padding: 10px 0; font-weight: bold; width: 40%; color: #333;">Brand</td>
+      <td style="padding: 10px 0; color: #666;">CRYO</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #eee;">
+      <td style="padding: 10px 0; font-weight: bold; color: #333;">Volume</td>
+      <td style="padding: 10px 0; color: #666;">1 Liter / 4 Liters</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #eee;">
+      <td style="padding: 10px 0; font-weight: bold; color: #333;">Type</td>
+      <td style="padding: 10px 0; color: #666;">Ready to Use (Pre-Mixed)</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #eee;">
+      <td style="padding: 10px 0; font-weight: bold; color: #333;">Lifespan</td>
+      <td style="padding: 10px 0; color: #666;">2 Years / 40,000 KM</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #eee;">
+      <td style="padding: 10px 0; font-weight: bold; color: #333;">Application</td>
+      <td style="padding: 10px 0; color: #666;">Automobiles, Generators, Industrial</td>
+    </tr>
+    <tr>
+      <td style="padding: 10px 0; font-weight: bold; color: #333;">Boiling Point</td>
+      <td style="padding: 10px 0; color: #666;">Up to 105°C (in pressurized system)</td>
+    </tr>
+  </tbody>
+</table>`,
             colorHex: data.color === 'red' ? '#E53935' : (data.color === 'blue' ? '#1E88E5' : '#4CAF50')
           };
         });
@@ -199,6 +238,22 @@ function openWhatsAppCheckout(cart, details) {
   window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
+// --- Skeleton Loader Generation ---
+function createSkeletonCard() {
+  return `
+    <div class="product-card" style="pointer-events: none; border: none; box-shadow: none;">
+      <div class="skeleton-image skeleton-pulse"></div>
+      <div class="product-info" style="padding: 10px 0;">
+        <div class="skeleton-text skeleton-pulse short"></div>
+        <div class="skeleton-text skeleton-pulse long" style="margin-top: 15px;"></div>
+        <div class="skeleton-price-row">
+          <div class="skeleton-text skeleton-pulse short"></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 // --- Product Card Generation ---
 function createProductCard(product) {
   let regPrice = Number(product.regularPrice || 0);
@@ -212,10 +267,10 @@ function createProductCard(product) {
     <div class="product-card">
       <div class="product-image" onclick="window.location.href='product.html?product=${product.id}'">
         ${discountBadge}
-        <div class="quick-view-icon">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </div>
-        <img src="${product.imageUrl}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <button class="quick-add-cart-btn" onclick="event.stopPropagation(); addToCart('${product.id}', 1, '${product.size}', '${product.color}', true)" aria-label="Add to cart">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        </button>
+        <img src="${product.imageUrl}" alt="${product.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="placeholder ${product.color} bottle-1l" style="display:none;"><span>CRYO ${product.size}</span></div>
         <div class="hover-add-btn">VIEW DETAILS</div>
       </div>
@@ -236,7 +291,25 @@ function createProductCard(product) {
 
 // --- Initialize App ---
 document.addEventListener('DOMContentLoaded', async () => {
+  // Inject skeletons before fetching data
+  const path = window.location.pathname;
+  const isHome = path.includes('index') || path === '/' || path.endsWith('/');
+  const isShop = path.includes('shop');
+  
+  if (isHome) {
+    const featuredGrid = document.getElementById('featured-products');
+    if (featuredGrid) {
+      featuredGrid.innerHTML = Array(4).fill(createSkeletonCard()).join('');
+    }
+  } else if (isShop) {
+    const shopGrid = document.getElementById('shop-products');
+    if (shopGrid) {
+      shopGrid.innerHTML = Array(8).fill(createSkeletonCard()).join('');
+    }
+  }
+
   await fetchSupabaseData();
+  applyDynamicSettings();
 
   // Sticky Header with Hysteresis & WhatsApp Float toggle
   const header = document.querySelector('header');
@@ -301,7 +374,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateCartBadge();
 
   // Page specific logic
-  const path = window.location.pathname;
   if (path.includes('index') || path === '/' || path.endsWith('/')) {
     initHomePage();
   } else if (path.includes('shop')) {
@@ -522,7 +594,16 @@ function initProductPage() {
   let currentQty = 1;
 
   // Set initial info
-  document.getElementById('product-title').textContent = product.name;
+  const titleEl = document.getElementById('product-title');
+  titleEl.textContent = product.name;
+  titleEl.classList.remove('skeleton-pulse', 'skeleton-text', 'long');
+  titleEl.style.minHeight = 'auto';
+  
+  const ratingStars = document.getElementById('product-rating-stars');
+  if (ratingStars) ratingStars.style.opacity = '1';
+  const ratingContainer = document.getElementById('product-rating-container');
+  if (ratingContainer) ratingContainer.classList.remove('skeleton-pulse', 'skeleton-text', 'medium');
+
   const breadcrumbTitle = document.getElementById('product-title-breadcrumb');
   if (breadcrumbTitle) {
     breadcrumbTitle.textContent = product.name;
@@ -541,9 +622,20 @@ function initProductPage() {
     const regEl = document.getElementById('reg-price');
     const offEl = document.getElementById('off-price');
     const badgeEl = document.getElementById('discount-badge-el');
+    const priceSection = document.getElementById('price-section-container');
     
-    if (regEl) regEl.textContent = `Rs. ${regPrice}`;
-    if (offEl) offEl.textContent = `Rs. ${offPrice}`;
+    if (regEl) {
+      regEl.textContent = `Rs. ${regPrice}`;
+      regEl.style.display = 'inline-block';
+    }
+    if (offEl) {
+      offEl.textContent = `Rs. ${offPrice}`;
+      offEl.style.display = 'inline-block';
+    }
+    if (priceSection) {
+      priceSection.classList.remove('skeleton-pulse', 'skeleton-text', 'short');
+      priceSection.style.minHeight = 'auto';
+    }
     
     if (badgeEl) {
       badgeEl.style.display = 'none';
@@ -556,7 +648,7 @@ function initProductPage() {
     let imageSrc = product.imageUrl;
     
     imgEl.src = imageSrc;
-    imgEl.style.display = 'block';
+    // imgEl.style.display = 'block'; // Handled by onload in HTML now to ensure skeleton stays until loaded
     phEl.style.display = 'none';
     
     imgEl.onerror = () => {
@@ -564,12 +656,22 @@ function initProductPage() {
       phEl.className = `placeholder ${currentColor} bottle-hero`;
       phEl.innerHTML = `<span>CRYO ${currentSize}</span>`;
       phEl.style.display = 'flex';
+      const wrapper = document.getElementById('main-image-wrapper');
+      if (wrapper) wrapper.classList.remove('skeleton-pulse', 'skeleton-image');
     };
   }
 
   function updateTextContent() {
     const shortDesc = document.getElementById('product-short-desc');
-    if (shortDesc) shortDesc.innerHTML = product.shortDescription || '';
+    if (shortDesc) {
+      if (product.shortDescription) {
+        shortDesc.innerHTML = product.shortDescription;
+        shortDesc.classList.remove('skeleton-pulse', 'skeleton-text', 'long');
+        shortDesc.style.minHeight = 'auto';
+      } else {
+        shortDesc.style.display = 'none';
+      }
+    }
 
     const longDesc = document.getElementById('product-long-desc');
     if (longDesc) longDesc.innerHTML = product.longDescription || '';
@@ -729,12 +831,16 @@ function initCheckoutPage() {
     `).join('');
   }
 
-  let deliveryFee = 200; // default standard
+  let deliveryFee = defaultDeliveryFee; // default standard
   
   function updateTotal() {
     const subtotal = getCartTotal();
     document.getElementById('checkout-subtotal').textContent = `Rs. ${subtotal}`;
-    document.getElementById('checkout-delivery').textContent = `Rs. ${deliveryFee}`;
+    if (deliveryFee === 0) {
+      document.getElementById('checkout-delivery').innerHTML = '<span style="color: var(--success);">Free</span>';
+    } else {
+      document.getElementById('checkout-delivery').textContent = `Rs. ${deliveryFee}`;
+    }
     totalEl.textContent = `Rs. ${subtotal + deliveryFee}`;
   }
   
@@ -760,7 +866,7 @@ function initCheckoutPage() {
   // Form Submit
   const form = document.getElementById('checkout-form');
   if(form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       // Basic validation
@@ -781,6 +887,14 @@ function initCheckoutPage() {
 
       if(!isValid) return;
 
+      // Loading State
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerText;
+      submitBtn.innerText = 'PLACING ORDER...';
+      submitBtn.disabled = true;
+
+      const deliveryLabel = document.querySelector('input[name="delivery"]:checked').nextElementSibling.querySelector('strong').innerText;
+
       const details = {
         name: document.getElementById('chk-name').value,
         phone: document.getElementById('chk-phone').value,
@@ -788,6 +902,7 @@ function initCheckoutPage() {
         address: document.getElementById('chk-address').value,
         notes: document.getElementById('chk-notes').value,
         deliveryFee: deliveryFee,
+        deliveryMethod: deliveryLabel,
         payment: document.querySelector('input[name="payment"]:checked').value
       };
 
@@ -799,27 +914,45 @@ function initCheckoutPage() {
         address: details.address,
         notes: details.notes,
         deliveryFee: details.deliveryFee,
+        deliveryMethod: details.deliveryMethod,
         paymentMethod: details.payment,
         items: cart.map(i => ({ name: i.name, size: i.size, color: i.color, qty: i.qty, price: i.offerPrice })),
         total: getCartTotal() + details.deliveryFee,
         status: 'Pending'
       };
 
-      // Save to Supabase
+      // Save to Supabase Synchronously
       if (typeof supabaseClient !== 'undefined') {
-        supabaseClient.from('orders').insert([orderRecord]).then(({ error }) => {
-          if (error) console.error("Error saving order:", error);
-        });
+        const { error } = await supabaseClient.from('orders').insert([orderRecord]);
+        if (error) {
+          console.error("Error saving order:", error);
+          alert("Failed to place order. Please try again or contact us.");
+          submitBtn.innerText = originalText;
+          submitBtn.disabled = false;
+          return;
+        }
       }
 
-      // Show success modal
-      document.getElementById('success-modal').style.display = 'flex';
+      // Hide checkout layout and page banner, show success section inline
+      document.getElementById('checkout-container').style.display = 'none';
+      const pageBanner = document.querySelector('.page-banner');
+      if (pageBanner) pageBanner.style.display = 'none';
       
-      // Open WA after a short delay
-      setTimeout(() => {
-        openWhatsAppCheckout(cart, details);
-        clearCart();
-      }, 1500);
+      const successSection = document.getElementById('checkout-success');
+      if(successSection) {
+        successSection.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Setup optional WA button
+      const waBtn = document.getElementById('wa-redirect-btn');
+      if(waBtn) {
+        waBtn.onclick = () => {
+          openWhatsAppCheckout(cart, details);
+        };
+      }
+      
+      clearCart();
     });
   }
 }
@@ -887,6 +1020,70 @@ function initContactPage() {
 }
 
 // --- Dual Range Slider Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+  renderCart();
+});
+
+function applyDynamicSettings() {
+  // Update WhatsApp Links across the site (including headers and footers generated by components)
+  document.querySelectorAll('a[href^="https://wa.me/"]').forEach(link => {
+    try {
+      if (link.href.includes('923014138007')) {
+        link.href = link.href.replace('923014138007', waNumber);
+      }
+    } catch (e) {}
+  });
+
+  // Update visible phone numbers in text
+  document.querySelectorAll('.footer-links p, .footer-links a').forEach(el => {
+    if (el.innerHTML.includes('0301-4138007')) {
+      // Simple formatting attempt if it starts with 92
+      let formattedWA = waNumber;
+      if (waNumber.startsWith('92') && waNumber.length === 12) {
+        formattedWA = '0' + waNumber.substring(2, 5) + '-' + waNumber.substring(5);
+      }
+      el.innerHTML = el.innerHTML.replace('0301-4138007', formattedWA);
+    }
+  });
+
+  // Update checkout delivery options if on checkout page
+  const stdInput = document.getElementById('delivery-std');
+  const stdPrice = document.getElementById('delivery-std-price');
+  if (stdInput && stdPrice) {
+    stdInput.value = defaultDeliveryFee;
+    if (defaultDeliveryFee === 0) {
+      stdPrice.innerHTML = '<span style="color: var(--success);">Free</span>';
+    } else {
+      stdPrice.textContent = `Rs. ${defaultDeliveryFee}`;
+    }
+  }
+
+  const expInput = document.getElementById('delivery-exp');
+  const expPrice = document.getElementById('delivery-exp-price');
+  if (expInput && expPrice) {
+    expInput.value = expressDeliveryFee;
+    expPrice.textContent = `Rs. ${expressDeliveryFee}`;
+  }
+
+  // Recalculate totals if currently checked
+  const checkoutDeliverySpan = document.getElementById('checkout-delivery');
+  if (checkoutDeliverySpan) {
+    const checkedInput = document.querySelector('input[name="delivery"]:checked');
+    if (checkedInput) {
+      if (Number(checkedInput.value) === 0) {
+        checkoutDeliverySpan.innerHTML = '<span style="color: var(--success);">Free</span>';
+      } else {
+        checkoutDeliverySpan.textContent = `Rs. ${checkedInput.value}`;
+      }
+      const totalEl = document.getElementById('checkout-total');
+      if (totalEl) {
+        const subtotal = getCartTotal();
+        totalEl.textContent = `Rs. ${subtotal + parseInt(checkedInput.value)}`;
+      }
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const priceMin = document.getElementById('price-min');
   const priceMax = document.getElementById('price-max');

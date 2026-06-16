@@ -27,9 +27,9 @@
       
       <!-- Left Column: Gallery -->
       <div class="product-gallery">
-        <div class="main-image" style="height: 480px; padding: 10px; background: #ffffff; position: relative;">
+        <div id="main-image-wrapper" class="main-image skeleton-pulse skeleton-image" style="background: #ffffff; position: relative; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; height: auto; min-height: 400px; padding: 20px; border: 1px solid var(--border);">
           <div id="discount-badge-el" class="discount-badge" style="display:none; font-size:16px; padding:6px 14px; top:20px; left:20px;"></div>
-          <img id="main-image-el" src="" alt="CRYO Radiator Coolant" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <img id="main-image-el" src="" alt="CRYO Radiator Coolant" style="display:none; width: 100%; height: auto; max-height: 500px; object-fit: contain;" onload="document.getElementById('main-image-wrapper').classList.remove('skeleton-pulse', 'skeleton-image'); this.style.display='block';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'; document.getElementById('main-image-wrapper').classList.remove('skeleton-pulse', 'skeleton-image');">
           <div id="main-placeholder-el" class="placeholder green bottle-hero" style="display: none;"><span>CRYO</span></div>
         </div>
         
@@ -39,23 +39,25 @@
 
       <!-- Right Column: Product Info -->
       <div class="product-info-detail">
-        <h1 id="product-title" style="font-family: 'Barlow', sans-serif; font-weight: 800; font-size: 36px; text-transform: uppercase; margin-bottom: 15px; color: var(--dark);"></h1>
+        <h1 id="product-title" class="skeleton-pulse skeleton-text long" style="font-family: 'Barlow', sans-serif; font-weight: 800; font-size: 36px; text-transform: uppercase; margin-bottom: 15px; color: var(--dark); min-height: 43px;"></h1>
         
-        <div class="product-rating" style="margin-bottom: 20px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          <span style="color: var(--text-muted); margin-left: 10px; font-weight: 600;">5.0 (128 reviews)</span>
+        <div id="product-rating-container" class="product-rating skeleton-pulse skeleton-text medium" style="margin-bottom: 20px; min-height: 20px;">
+          <span style="opacity: 0; transition: opacity 0.3s;" id="product-rating-stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span style="color: var(--text-muted); margin-left: 10px; font-weight: 600;">5.0 (128 reviews)</span>
+          </span>
         </div>
 
-        <div class="price-section" style="margin-bottom: 25px;">
-          <span class="regular-price" id="reg-price"></span>
-          <span class="offer-price" id="off-price"></span>
+        <div class="price-section skeleton-pulse skeleton-text short" id="price-section-container" style="margin-bottom: 25px; min-height: 40px;">
+          <span class="regular-price" id="reg-price" style="display: none;"></span>
+          <span class="offer-price" id="off-price" style="display: none;"></span>
         </div>
 
-        <p class="short-desc" id="product-short-desc" style="margin-bottom: 25px;"></p>
+        <div class="short-desc skeleton-pulse skeleton-text long" id="product-short-desc" style="margin-bottom: 25px; min-height: 60px;"></div>
 
 
         <!-- Quantity & Actions -->
@@ -113,6 +115,6 @@
   <script src="assets/js/supabase-config.js"></script>
   
   <script src="assets/js/components.js?v=6" defer></script>
-  <script src="assets/js/main.js?v=6"></script>
+  <script src="assets/js/main.js?v=10"></script>
 </body>
 </html>

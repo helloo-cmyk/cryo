@@ -87,3 +87,11 @@ This file contains the strict guidelines, coding practices, and content standard
 ### Rule 26: Design Continuity and Section Compatibility
 * **Strict Guideline**: Whenever designing, redesigning, or modifying any section of a page, you MUST carefully consider and analyze the design, background colors, typography, borders, and general layout transitions of both the **immediate next section** and the **immediate previous section**. Creating jarring color transitions or clashing layouts (e.g., placing high-contrast dark bars directly next to white-background component sections) is STRICTLY PROHIBITED.
 * **Required Action**: Always ensure a smooth, premium, and unified visual flow across all adjacent sections of the page.
+
+### Rule 27: Never Change the Logo Without Explicit Permission
+* **Strict Guideline**: You MUST NOT change, replace, remove, or alter the format of the logo (e.g. replacing the image logo with a CSS/HTML-based text logo) anywhere on the website (including headers, footers, and admin panels) unless the user explicitly commands you to do so.
+* **Required Action**: Always preserve the existing logo image tags (e.g., `<img src="assets/images/cryo-logo-horizontal.png">`) and their specific classes, layouts, and structures exactly as they are. Altering the logo setup is STRICTLY PROHIBITED.
+
+### Rule 28: Mandatory Table/Column Creation Scripts for New Backend Features
+* **Strict Guideline**: Whenever you implement a new feature or modify an existing feature that requires saving new data to the backend (e.g., Supabase), you MUST explicitly ask the user to add the required table or column.
+* **Required Action**: You MUST provide the exact SQL script needed to create the table or column. Failing to inform the user about backend schema changes or failing to provide the SQL script is STRICTLY PROHIBITED.

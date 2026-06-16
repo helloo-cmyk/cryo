@@ -5,7 +5,7 @@ class HeaderComponent extends HTMLElement {
         <div class="header-top">
           <div class="container header-top-container">
             <div class="header-logo-section">
-              <a href="index.html" class="logo">
+              <a href="/" class="logo" style="text-decoration: none;">
                 <img src="assets/images/cryo-logo-horizontal.png" alt="CRYO Logo" height="48">
               </a>
             </div>
@@ -40,7 +40,7 @@ class HeaderComponent extends HTMLElement {
         
         <div class="header-bottom" id="header-bottom">
           <div class="container header-bottom-container">
-            <a href="index.html" class="scrolled-logo">
+            <a href="/" class="scrolled-logo" style="text-decoration: none;">
               <img src="assets/images/cryo-logo-horizontal.png" alt="CRYO Logo" height="38">
             </a>
             <div class="menu-overlay"></div>
@@ -145,40 +145,40 @@ class FooterComponent extends HTMLElement {
         <div class="container">
           <div class="footer-grid">
             <div class="footer-col">
-              <a href="index.html" style="display: inline-block; margin-bottom: 15px;">
+              <a href="/" style="display: inline-block; margin-bottom: 20px; text-decoration: none;">
                 <img src="assets/images/cryo-logo-horizontal.png" alt="CRYO Logo" style="height: 55px !important; mix-blend-mode: screen; margin-left: -5px; display: block;">
               </a>
-              <p>Ultimate Protection. Peak Performance.</p>
+              <p style="margin-bottom: 5px;">Ultimate Protection. Peak Performance.</p>
               <p>Premium engine coolant helping keep cars and industrial machinery cool.</p>
             </div>
             
             <div class="footer-col">
               <h4>Quick Links</h4>
               <div class="footer-links">
-                <a href="index.html">Home</a>
-                <a href="shop.html">Shop</a>
-                <a href="about.html">About Us</a>
-                <a href="contact.html">Contact Us</a>
-                <a href="dealer.html">Dealer Inquiry</a>
+                <a href="/">Home</a>
+                <a href="/shop">Shop</a>
+                <a href="/about">About Us</a>
+                <a href="/contact">Contact Us</a>
+                <a href="/dealer">Dealer Inquiry</a>
               </div>
             </div>
             
             <div class="footer-col">
               <h4>Policies</h4>
               <div class="footer-links">
-                <a href="shipping-policy.html">Shipping Policy</a>
-                <a href="return-policy.html">Return/Refund Policy</a>
-                <a href="privacy-policy.html">Privacy Policy</a>
-                <a href="terms.html">Terms & Conditions</a>
+                <a href="/shipping-policy">Shipping Policy</a>
+                <a href="/return-policy">Return/Refund Policy</a>
+                <a href="/privacy-policy">Privacy Policy</a>
+                <a href="/terms">Terms & Conditions</a>
               </div>
             </div>
             
             <div class="footer-col">
               <h4>Contact Info</h4>
               <div class="footer-links">
-                <p><strong>Phone:</strong> 0301-4138007</p>
-                <p><strong>WhatsApp:</strong> <a href="https://wa.me/923014138007" target="_blank" rel="noopener">0301-4138007</a></p>
-                <p><strong>Address:</strong><br>Fiesta Garden, Nawan Shehar,<br>Near RTO Office, Multan</p>
+                <p><strong style="color: var(--white);">Phone:</strong> <span style="color: var(--text-muted);">0301-4138007</span></p>
+                <p><strong style="color: var(--white);">WhatsApp:</strong> <a href="https://wa.me/923014138007" target="_blank" rel="noopener" style="color: var(--text-muted);">0301-4138007</a></p>
+                <p><strong style="color: var(--white);">Address:</strong><br><span style="color: var(--text-muted); line-height: 1.8; display: inline-block; margin-top: 5px;">Fiesta Garden, Nawan Shehar,<br>Near RTO Office, Multan</span></p>
               </div>
             </div>
           </div>
@@ -189,9 +189,7 @@ class FooterComponent extends HTMLElement {
         </div>
         
         <a href="https://wa.me/923014138007" class="floating-wa" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-          <svg width="35" height="35" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.146.564 4.237 1.636 6.07L.17 24l6.04-1.583A11.97 11.97 0 0 0 12.031 24c6.645 0 12.03-5.386 12.03-12.031S18.676 0 12.031 0zm3.327 17.202c-.524 1.472-2.584 2.128-3.565 2.213-.815.07-1.921-.132-3.41-1.258-2.55-1.928-4.228-4.706-4.356-4.877-.128-.17-1.04-1.385-1.04-2.639 0-1.254.653-1.874.887-2.129.233-.255.508-.318.678-.318.17 0 .34.004.492.01.17.009.398-.065.625.485.234.552.75 1.831.815 1.961.065.13.109.28.024.45-.084.17-.13.275-.256.425-.13.15-.27.322-.387.45-.13.14-.268.293-.113.561.155.267.693 1.144 1.488 1.854.912.816 1.765 1.07 2.033 1.199.268.13.425.109.584-.065.158-.174.68-1.041.862-1.399.182-.358.365-.298.614-.206.25.09 1.582.748 1.852.883.27.135.45.202.516.315.066.113.066.651-.458 2.123z"/>
-          </svg>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="75" height="75" style="border-radius: 50%;">
         </a>
       </footer>
     `;
