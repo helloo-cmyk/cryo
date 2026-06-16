@@ -739,7 +739,7 @@ function initProductPage() {
   // Related products
   const related = document.getElementById('related-products');
   if(related) {
-    const others = products.filter(p => p.id !== product.id).slice(0, 3);
+    const others = products.filter(p => p.id !== product.id).slice(0, 4);
     related.innerHTML = others.map(p => createProductCard(p)).join('');
   }
 }

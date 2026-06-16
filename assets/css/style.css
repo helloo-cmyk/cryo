@@ -142,7 +142,8 @@ ul {
 
 @media (max-width: 992px) {
   /* Make products side-by-side (2 columns) on mobile */
-  #featured-products.grid-cols-3 {
+  #featured-products.grid-cols-3,
+  #related-products.grid-cols-3 {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 15px !important;
   }
@@ -150,6 +151,13 @@ ul {
   .testimonials .grid-cols-3 {
     grid-template-columns: 1fr !important;
     gap: 20px !important;
+  }
+}
+
+@media (min-width: 993px) {
+  /* Only show 3 related products on desktop */
+  #related-products > :nth-child(n+4) {
+    display: none !important;
   }
 }
 
