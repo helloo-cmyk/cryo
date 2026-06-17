@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews | CRYO Admin</title>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <img src="../assets/images/cryo-logo-horizontal.png" alt="CRYO Logo">
+      </div>
+      <nav></nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="topbar">
+        <h1 class="page-title">Customer Reviews</h1>
+        <div class="user-profile">
+          <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div class="card-header">
+          <h3>Homepage Testimonials</h3>
+          <button class="btn-sm" id="add-review-btn">Add Review</button>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Rating</th>
+              <th>Review</th>
+              <th>Author</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reviews-table-body">
+            <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Review Modal -->
+  <div class="modal-overlay" id="review-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="review-modal-title">Add Review</h3>
+        <button class="close-modal" id="close-review-modal">&times;</button>
+      </div>
+      <form id="review-form">
+        <input type="hidden" id="review-id">
+        <div class="form-group">
+          <label>Rating (1-5)</label>
+          <select id="review-rating" class="form-control">
+            <option value="5">5 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="2">2 Stars</option>
+            <option value="1">1 Star</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Review Text</label>
+          <textarea id="review-text" class="form-control" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Author (e.g. Muhammad Usman – Multan)</label>
+          <input type="text" id="review-author" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Sort Order (lower = first)</label>
+          <input type="number" id="review-sort" class="form-control" value="0">
+        </div>
+        <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+          <input type="checkbox" id="review-active" checked>
+          <label for="review-active" style="margin:0;">Show on website</label>
+        </div>
+        <button type="submit" class="btn-admin">Save Review</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/admin.js"></script>
+  <script src="assets/js/admin-nav.js"></script>
+  <script src="assets/js/cms-admin.js"></script>
+</body>
+</html>

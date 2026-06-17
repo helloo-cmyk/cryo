@@ -88,15 +88,16 @@
           <div class="contact-card" style="margin-bottom: 30px;">
             <h3>Get in Touch</h3>
             <ul class="contact-info-list">
-              <li><strong>Phone</strong> <a href="tel:03014138007">0301-4138007</a></li>
-              <li><strong>WhatsApp</strong> <a href="https://wa.me/923014138007">0301-4138007</a></li>
-              <li><strong>Email</strong> <a href="mailto:info@cryo.pk">info@cryo.pk</a></li>
-              <li><strong>Headquarters</strong> Fiesta Garden, Nawan Shehar,<br> Near RTO Office, Multan</li>
+              <li><strong>Phone</strong> <a href="tel:923014138007" class="cms-phone-link">0301-4138007</a></li>
+              <li><strong>WhatsApp</strong> <a href="https://wa.me/923014138007" class="cms-wa-link">0301-4138007</a></li>
+              <li><strong>Email</strong> <a href="mailto:info@cryo.pk" class="cms-email-link">info@cryo.pk</a></li>
+              <li><strong>Headquarters</strong> <span class="cms-address">Fiesta Garden, Nawan Shehar,<br> Near RTO Office, Multan</span></li>
             </ul>
           </div>
           
           <div class="map-container">
             <iframe 
+              id="contact-map"
               src="https://maps.google.com/maps?q=Fiesta%20Garden%20Nawan%20Shehar%20Near%20RTO%20Office%20Multan&t=&z=13&ie=UTF8&iwloc=&output=embed" 
               width="100%" 
               height="100%" 
@@ -139,6 +140,9 @@
 
   <site-footer></site-footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/cms.js"></script>
   <script src="assets/js/main.js?v=6"></script>
 </body>
 </html>

@@ -12,7 +12,7 @@
   <site-header></site-header>
 
   <!-- Hero Section -->
-  <section class="hero-full">
+  <section class="hero-full" id="home-hero">
     <div class="container hero-full-content">
       <div class="hero-text-area">
         <span class="hero-tagline">BEYOND TEMPERATURE</span>
@@ -112,7 +112,7 @@
   <section class="benefits-section" id="about">
     <div class="container benefits-grid">
       <div class="benefits-image-wrapper">
-        <img src="assets/images/1l and 4l red.jpeg" alt="CRYO Red 1L and 4L" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <img id="benefits-section-img" src="assets/images/1l and 4l red.jpeg" alt="CRYO Red 1L and 4L" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="placeholder red bottle-4l" style="display: none; width: 100%; height: 100%;"><span>CRYO 4L</span></div>
       </div>
       <div>
@@ -191,7 +191,7 @@
         <span class="badge-slanted">CUSTOMER REVIEWS</span>
       </div>
       <h2 class="section-header">Trusted by Customers Across Pakistan</h2>
-      <div class="grid grid-cols-3 gap-30 text-left">
+      <div id="testimonials-grid" class="grid grid-cols-3 gap-30 text-left">
         <div class="testimonial-card">
           <div class="testimonial-rating"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
           <p class="testimonial-text">Excellent quality coolant. My car used to overheat in the Multan summer, but after using CRYO Green 4L, the temperature gauge stays perfect.</p>
@@ -234,7 +234,7 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/supabase-config.js"></script>
-  
+  <script src="assets/js/cms.js"></script>
   <script src="assets/js/components.js?v=6" defer></script>
   <script src="assets/js/main.js?v=9"></script>
 </body>

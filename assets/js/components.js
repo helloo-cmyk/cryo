@@ -17,7 +17,7 @@ class HeaderComponent extends HTMLElement {
                 </div>
                 <div class="info-text">
                   <span class="info-label">Call Us Support</span>
-                  <span class="info-value">0301-4138007</span>
+                  <span class="info-value cms-phone">0301-4138007</span>
                 </div>
               </div>
               <div class="info-block">
@@ -25,8 +25,8 @@ class HeaderComponent extends HTMLElement {
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                 </div>
                 <div class="info-text">
-                  <span class="info-label">Fiesta Garden, Near RTO Office</span>
-                  <span class="info-value">NAWAN SHEHAR, MULTAN</span>
+                  <span class="info-label cms-header-address-label">Fiesta Garden, Near RTO Office</span>
+                  <span class="info-value cms-header-address-value">NAWAN SHEHAR, MULTAN</span>
                 </div>
               </div>
               <div class="header-socials">
@@ -176,9 +176,10 @@ class FooterComponent extends HTMLElement {
             <div class="footer-col">
               <h4>Contact Info</h4>
               <div class="footer-links">
-                <p><strong style="color: var(--white);">Phone:</strong> <span style="color: var(--text-muted);">0301-4138007</span></p>
-                <p><strong style="color: var(--white);">WhatsApp:</strong> <a href="https://wa.me/923014138007" target="_blank" rel="noopener" style="color: var(--text-muted);">0301-4138007</a></p>
-                <p><strong style="color: var(--white);">Address:</strong><br><span style="color: var(--text-muted); line-height: 1.8; display: inline-block; margin-top: 5px;">Fiesta Garden, Nawan Shehar,<br>Near RTO Office, Multan</span></p>
+                <p><strong style="color: var(--white);">Phone:</strong> <span class="cms-phone" style="color: var(--text-muted);">0301-4138007</span></p>
+                <p><strong style="color: var(--white);">WhatsApp:</strong> <a href="https://wa.me/923014138007" target="_blank" rel="noopener" class="cms-wa-link" style="color: var(--text-muted);">0301-4138007</a></p>
+                <p><strong style="color: var(--white);">Email:</strong> <a href="mailto:info@cryo.pk" class="cms-email-link" style="color: var(--text-muted);">info@cryo.pk</a></p>
+                <p><strong style="color: var(--white);">Address:</strong><br><span class="cms-address" style="color: var(--text-muted); line-height: 1.8; display: inline-block; margin-top: 5px;">Fiesta Garden, Nawan Shehar,<br>Near RTO Office, Multan</span></p>
               </div>
             </div>
           </div>

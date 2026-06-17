@@ -2,6 +2,12 @@
 
 let quillLongDesc, quillFeatures, quillSpecs;
 
+async function mergeSettings(patch) {
+  const { data: existing } = await supabaseClient.from('settings').select('*').eq('id', 'global').single();
+  const merged = { ...(existing || {}), ...patch, id: 'global' };
+  return await supabaseClient.from('settings').upsert(merged);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const isDashboard = window.location.pathname.includes('dashboard');
   const isProducts = window.location.pathname.includes('products');

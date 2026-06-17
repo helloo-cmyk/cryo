@@ -106,8 +106,8 @@
               </div>
               <div class="payment-details" id="details-jazzcash" style="width: 100%; display: none;">
                 <div style="background: #f9f9f9; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; border: 1px solid #eee;">
-                  <strong style="color:var(--dark);">Title:</strong> Ali imtiaz<br>
-                  <strong style="color:var(--dark);">Account:</strong> 03017462055
+                  <strong style="color:var(--dark);">Title:</strong> <span id="bank-jazz-title">Ali imtiaz</span><br>
+                  <strong style="color:var(--dark);">Account:</strong> <span id="bank-jazz-account">03017462055</span>
                 </div>
                 <em style="color: var(--primary); font-size: 13px; display: block;">* Please share the payment receipt on WhatsApp after placing the order.</em>
               </div>
@@ -120,9 +120,9 @@
               </div>
               <div class="payment-details" id="details-meezan" style="width: 100%; display: none;">
                 <div style="background: #f9f9f9; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; border: 1px solid #eee;">
-                  <strong style="color:var(--dark);">Title:</strong> Imtiaz & sons traders<br>
-                  <strong style="color:var(--dark);">Account:</strong> 68010113530815<br>
-                  <strong style="color:var(--dark);">IBAN:</strong> PK59MEZN0068010113530815
+                  <strong style="color:var(--dark);">Title:</strong> <span id="bank-meezan-title">Imtiaz & sons traders</span><br>
+                  <strong style="color:var(--dark);">Account:</strong> <span id="bank-meezan-account">68010113530815</span><br>
+                  <strong style="color:var(--dark);">IBAN:</strong> <span id="bank-meezan-iban">PK59MEZN0068010113530815</span>
                 </div>
                 <em style="color: var(--primary); font-size: 13px; display: block;">* Please share the payment receipt on WhatsApp after placing the order.</em>
               </div>
@@ -135,9 +135,9 @@
               </div>
               <div class="payment-details" id="details-ubl" style="width: 100%; display: none;">
                 <div style="background: #f9f9f9; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; border: 1px solid #eee;">
-                  <strong style="color:var(--dark);">Title:</strong> Imtiaz and Sons Traders<br>
-                  <strong style="color:var(--dark);">Account:</strong> 2713378030254<br>
-                  <strong style="color:var(--dark);">IBAN:</strong> PK54UNIL0109000378030254
+                  <strong style="color:var(--dark);">Title:</strong> <span id="bank-ubl-title">Imtiaz and Sons Traders</span><br>
+                  <strong style="color:var(--dark);">Account:</strong> <span id="bank-ubl-account">2713378030254</span><br>
+                  <strong style="color:var(--dark);">IBAN:</strong> <span id="bank-ubl-iban">PK54UNIL0109000378030254</span>
                 </div>
                 <em style="color: var(--primary); font-size: 13px; display: block;">* Please share the payment receipt on WhatsApp after placing the order.</em>
               </div>
@@ -205,6 +205,7 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/cms.js"></script>
   
   <script src="assets/js/components.js?v=6" defer></script>
   <script src="assets/js/main.js?v=6"></script>
