@@ -22,10 +22,14 @@ async function fetchSupabaseData() {
         }
       }
 
-      // Load testimonials for homepage
-      const { data: reviewsData } = await supabaseClient.from('testimonials').select('*').eq('is_active', true).order('sort_order', { ascending: true });
-      if (reviewsData && typeof window !== 'undefined') {
-        window.cmsTestimonials = reviewsData;
+      // Load CMS + testimonials from page_content
+      if (typeof window.loadSiteCms === 'function') {
+        const cms = await window.loadSiteCms();
+        siteSettings = { ...siteSettings, ...cms };
+        cmsSettings = { ...cms, whatsappNumber: waNumber };
+      }
+      if (typeof window.loadTestimonials === 'function') {
+        window.cmsTestimonials = await window.loadTestimonials();
       }
 
       // Fetch products
@@ -319,7 +323,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   await fetchSupabaseData();
   if (typeof window.cmsLoadData === 'function') {
     await window.cmsLoadData();
-    if (typeof window.cmsApplyAll === 'function') window.cmsApplyAll();
+    if (typeof window.cmsApplyAll === 'function') {
+      window.cmsApplyAll({ whatsappNumber: waNumber, ...siteSettings });
+    }
   }
   applyDynamicSettings();
 

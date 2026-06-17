@@ -1,7 +1,15 @@
-// CMS loader for static pages (policies, about, contact) and shared site settings
+// CMS loader for static pages — reads from page_content via cms-store.js
 
 let cmsSettings = {};
 let cmsTestimonials = [];
+
+async function loadCmsData() {
+  if (typeof loadSiteCms !== 'function') return;
+  cmsSettings = await loadSiteCms();
+  if (typeof loadTestimonials === 'function') {
+    cmsTestimonials = await loadTestimonials();
+  }
+}
 
 function formatPhoneDisplay(waNumber, phoneDisplay) {
   if (phoneDisplay) return phoneDisplay;
@@ -16,20 +24,6 @@ function formatPhoneTel(phoneDisplay, waNumber) {
   return raw.replace(/[^0-9]/g, '').replace(/^0/, '92');
 }
 
-async function loadCmsData() {
-  if (typeof supabaseClient === 'undefined') return;
-
-  try {
-    const { data: settingsData } = await supabaseClient.from('settings').select('*').eq('id', 'global').single();
-    if (settingsData) cmsSettings = settingsData;
-
-    const { data: reviewsData } = await supabaseClient.from('testimonials').select('*').eq('is_active', true).order('sort_order', { ascending: true });
-    if (reviewsData) cmsTestimonials = reviewsData;
-  } catch (e) {
-    console.error('CMS load error:', e);
-  }
-}
-
 function applyBannerImage(selector, url, gradient) {
   if (!url) return;
   const el = document.querySelector(selector);
@@ -39,15 +33,13 @@ function applyBannerImage(selector, url, gradient) {
 }
 
 function applySiteContactInfo() {
-  const phone = formatPhoneDisplay(cmsSettings.whatsappNumber, cmsSettings.phone_display);
-  const tel = formatPhoneTel(cmsSettings.phone_display, cmsSettings.whatsappNumber);
-  const wa = cmsSettings.whatsappNumber || '923014138007';
+  const wa = cmsSettings.whatsappNumber || window.waNumber || '923014138007';
+  const phone = formatPhoneDisplay(wa, cmsSettings.phone_display);
+  const tel = formatPhoneTel(cmsSettings.phone_display, wa);
   const email = cmsSettings.email || 'info@cryo.pk';
   const address = cmsSettings.address || '';
 
-  document.querySelectorAll('.cms-phone').forEach(el => {
-    el.textContent = phone;
-  });
+  document.querySelectorAll('.cms-phone').forEach(el => { el.textContent = phone; });
   document.querySelectorAll('.cms-phone-link').forEach(el => {
     el.textContent = phone;
     el.href = `tel:${tel}`;
@@ -56,13 +48,9 @@ function applySiteContactInfo() {
     el.textContent = phone;
     el.href = `https://wa.me/${wa}`;
   });
-  document.querySelectorAll('.cms-email').forEach(el => {
+  document.querySelectorAll('.cms-email, .cms-email-link').forEach(el => {
     el.textContent = email;
     if (el.tagName === 'A') el.href = `mailto:${email}`;
-  });
-  document.querySelectorAll('.cms-email-link').forEach(el => {
-    el.textContent = email;
-    el.href = `mailto:${email}`;
   });
   document.querySelectorAll('.cms-address').forEach(el => {
     el.innerHTML = address.replace(/\n/g, '<br>');
@@ -75,7 +63,6 @@ function applySiteContactInfo() {
     const parts = address.split(',');
     el.textContent = parts.slice(1).join(',').trim() || 'NAWAN SHEHAR, MULTAN';
   });
-
   document.querySelectorAll('a[href^="https://wa.me/"]').forEach(link => {
     link.href = `https://wa.me/${wa}`;
   });
@@ -122,7 +109,6 @@ function renderTestimonialStars(rating) {
 function renderTestimonials() {
   const grid = document.getElementById('testimonials-grid');
   if (!grid || !cmsTestimonials.length) return;
-
   grid.innerHTML = cmsTestimonials.map(t => `
     <div class="testimonial-card">
       <div class="testimonial-rating">${renderTestimonialStars(t.rating)}</div>
@@ -134,12 +120,9 @@ function renderTestimonials() {
 
 async function loadPolicyPage(slug) {
   const container = document.getElementById('cms-page-content');
-  if (!container) return;
-
-  const { data } = await supabaseClient.from('page_content').select('*').eq('slug', slug).single();
-  if (data && data.content) {
-    container.innerHTML = data.content;
-  }
+  if (!container || typeof supabaseClient === 'undefined') return;
+  const { data } = await supabaseClient.from('page_content').select('*').eq('slug', slug).maybeSingle();
+  if (data && data.content) container.innerHTML = data.content;
   if (data && data.title) {
     const titleEl = document.getElementById('cms-page-title');
     if (titleEl) titleEl.textContent = data.title;
@@ -162,11 +145,8 @@ function applyAboutContent() {
     const el = document.getElementById('about-benefits-list');
     if (el) {
       const html = cmsSettings.about_benefits_list.trim();
-      if (html.startsWith('<ul')) {
-        el.outerHTML = html;
-      } else {
-        el.innerHTML = html;
-      }
+      if (html.startsWith('<ul')) el.outerHTML = html;
+      else el.innerHTML = html;
     }
   }
   setHtml('about-formula-title', cmsSettings.about_formula_title);
@@ -182,32 +162,28 @@ function applyContactPage() {
 
 async function initCmsPage() {
   await loadCmsData();
+  cmsSettings.whatsappNumber = cmsSettings.whatsappNumber || window.waNumber;
   applySiteContactInfo();
   applyCmsBanners();
   applyBankDetails();
   renderTestimonials();
 
   const path = window.location.pathname;
-  if (path.includes('about')) {
-    applyAboutContent();
-  }
-  if (path.includes('contact')) {
-    applyContactPage();
-  }
+  if (path.includes('about')) applyAboutContent();
+  if (path.includes('contact')) applyContactPage();
   if (path.includes('privacy-policy')) await loadPolicyPage('privacy-policy');
   if (path.includes('terms')) await loadPolicyPage('terms');
   if (path.includes('shipping-policy')) await loadPolicyPage('shipping-policy');
   if (path.includes('return-policy')) await loadPolicyPage('return-policy');
 }
 
-// Auto-init on CMS-only pages (no main.js)
 if (!document.querySelector('script[src*="main.js"]')) {
   document.addEventListener('DOMContentLoaded', initCmsPage);
 }
 
-// Expose for main.js
 window.cmsLoadData = loadCmsData;
-window.cmsApplyAll = function () {
+window.cmsApplyAll = function (extra) {
+  if (extra) cmsSettings = { ...cmsSettings, ...extra };
   applySiteContactInfo();
   applyCmsBanners();
   applyBankDetails();

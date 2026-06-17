@@ -138,6 +138,7 @@
   </div>
 
   <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/cms-store.js"></script>
   <script src="assets/js/auth.js"></script>
   <script src="assets/js/admin.js"></script>
   <script src="assets/js/admin-nav.js"></script>
@@ -173,23 +174,23 @@
       }
 
       try {
-        const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 'global').single();
+        const cms = await loadSiteCms();
+        phoneInput.value = cms.phone_display || '0301-4138007';
+        emailInput.value = cms.email || 'info@cryo.pk';
+        addressInput.value = cms.address || '';
+        mapInput.value = cms.map_embed_url || '';
+        document.getElementById('s-jazz-title').value = cms.jazzcash_title || '';
+        document.getElementById('s-jazz-account').value = cms.jazzcash_account || '';
+        document.getElementById('s-meezan-title').value = cms.meezan_title || '';
+        document.getElementById('s-meezan-account').value = cms.meezan_account || '';
+        document.getElementById('s-meezan-iban').value = cms.meezan_iban || '';
+        document.getElementById('s-ubl-title').value = cms.ubl_title || '';
+        document.getElementById('s-ubl-account').value = cms.ubl_account || '';
+        document.getElementById('s-ubl-iban').value = cms.ubl_iban || '';
+
+        const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 'global').maybeSingle();
         if (!error && data) {
           waInput.value = data.whatsappNumber || '923014138007';
-          phoneInput.value = data.phone_display || '0301-4138007';
-          emailInput.value = data.email || 'info@cryo.pk';
-          addressInput.value = data.address || '';
-          mapInput.value = data.map_embed_url || '';
-
-          document.getElementById('s-jazz-title').value = data.jazzcash_title || '';
-          document.getElementById('s-jazz-account').value = data.jazzcash_account || '';
-          document.getElementById('s-meezan-title').value = data.meezan_title || '';
-          document.getElementById('s-meezan-account').value = data.meezan_account || '';
-          document.getElementById('s-meezan-iban').value = data.meezan_iban || '';
-          document.getElementById('s-ubl-title').value = data.ubl_title || '';
-          document.getElementById('s-ubl-account').value = data.ubl_account || '';
-          document.getElementById('s-ubl-iban').value = data.ubl_iban || '';
-
           let fetchedDelivery = Number(data.deliveryCharge);
           if (isNaN(fetchedDelivery)) fetchedDelivery = 200;
           if (fetchedDelivery === 0 && data.deliveryCharge !== null) {
@@ -208,14 +209,15 @@
 
       document.getElementById('contact-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const { error } = await mergeSettings({
+        const { error: cmsErr } = await saveSiteCms({
           phone_display: phoneInput.value.trim(),
-          whatsappNumber: waInput.value.trim(),
           email: emailInput.value.trim(),
           address: addressInput.value.trim(),
           map_embed_url: mapInput.value.trim()
         });
-        if (error) alert('Error: ' + error.message);
+        const { error: waErr } = await mergeSettings({ whatsappNumber: waInput.value.trim() });
+        const error = cmsErr || waErr;
+        if (error) alert(cmsSchemaErrorMessage(error) || error.message);
         else showMsg('contact-msg');
       });
 
@@ -237,7 +239,7 @@
 
       document.getElementById('bank-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const { error } = await mergeSettings({
+        const { error } = await saveSiteCms({
           jazzcash_title: document.getElementById('s-jazz-title').value.trim(),
           jazzcash_account: document.getElementById('s-jazz-account').value.trim(),
           meezan_title: document.getElementById('s-meezan-title').value.trim(),
@@ -247,7 +249,7 @@
           ubl_account: document.getElementById('s-ubl-account').value.trim(),
           ubl_iban: document.getElementById('s-ubl-iban').value.trim()
         });
-        if (error) alert('Error: ' + error.message);
+        if (error) alert(cmsSchemaErrorMessage(error) || error.message);
         else showMsg('bank-msg');
       });
 
