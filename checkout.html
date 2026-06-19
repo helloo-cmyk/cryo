@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | CRYO Radiator Coolant</title>
+  <meta name="description" content="Secure checkout for your CRYO Radiator Coolant order.">
+  <link rel="stylesheet" href="assets/css/style.css?v=6">
+</head>
+<body>
+
+  <site-header></site-header>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <div class="container">
+      <h1>Checkout</h1>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> > <a href="cart.html">Cart</a> > Checkout
+      </div>
+    </div>
+  </section>
+
+  <!-- Checkout Section -->
+  <section class="container checkout-layout" id="checkout-container">
+    
+    <!-- Left: Form -->
+    <div class="checkout-form">
+      <form id="checkout-form">
+        
+        <section>
+          <h3>Customer Information</h3>
+          <div class="form-group">
+            <label>Full Name*</label>
+            <input type="text" id="chk-name" class="form-control" placeholder="Enter your full name" required>
+            <div class="error-message" id="err-name" style="display:none; color:var(--primary); font-size:12px; margin-top:5px;">Full name is required.</div>
+          </div>
+          <div class="form-group">
+            <label>WhatsApp / Mobile*</label>
+            <input type="text" id="chk-phone" class="form-control" placeholder="e.g. 0301-1234567" required>
+            <div class="error-message" id="err-phone" style="display:none; color:var(--primary); font-size:12px; margin-top:5px;">Phone number is required.</div>
+          </div>
+          <div class="form-group">
+            <label>City*</label>
+            <input type="text" id="chk-city" class="form-control" placeholder="e.g. Multan" required>
+            <div class="error-message" id="err-city" style="display:none; color:var(--primary); font-size:12px; margin-top:5px;">City is required.</div>
+          </div>
+          <div class="form-group">
+            <label>Complete Address*</label>
+            <textarea id="chk-address" class="form-control" rows="3" placeholder="House/Shop no, Street, Area" required></textarea>
+            <div class="error-message" id="err-address" style="display:none; color:var(--primary); font-size:12px; margin-top:5px;">Address is required.</div>
+          </div>
+          <div class="form-group">
+            <label>Order Notes (Optional)</label>
+            <input type="text" id="chk-notes" class="form-control" placeholder="Any specific delivery instructions?">
+          </div>
+        </section>
+
+        <section>
+          <h3>Delivery Method</h3>
+          <div class="radio-group">
+            <label class="radio-card">
+              <input type="radio" name="delivery" id="delivery-std" value="200" checked>
+              <div style="flex-grow: 1;">
+                <strong>Standard Delivery</strong><br>
+                <span class="text-muted">3–5 business days</span>
+              </div>
+              <strong id="delivery-std-price">Rs. 200</strong>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="delivery" id="delivery-exp" value="350">
+              <div style="flex-grow: 1;">
+                <strong>Express Delivery</strong><br>
+                <span class="text-muted">1–2 business days</span>
+              </div>
+              <strong id="delivery-exp-price">Rs. 350</strong>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="delivery" value="0">
+              <div style="flex-grow: 1;">
+                <strong>Self Pickup</strong><br>
+                <span class="text-muted">From Multan Office Only</span>
+              </div>
+              <strong style="color: var(--success);">Free</strong>
+            </label>
+          </div>
+        </section>
+
+        <section>
+          <h3>Payment Method</h3>
+          <div class="radio-group">
+            <label class="radio-card" style="align-items: flex-start; flex-direction: column; gap: 5px;">
+              <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                <input type="radio" name="payment" value="cod" checked>
+                <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Cash on Delivery</strong>
+              </div>
+              <div class="payment-details" id="details-cod" style="width: 100%; display: block;">
+                <em style="color: var(--primary); font-size: 13px; display: block; margin-top: 5px;">* Pay directly to the courier when your order arrives.</em>
+              </div>
+            </label>
+
+            <label class="radio-card" style="align-items: flex-start; flex-direction: column; gap: 5px;">
+              <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                <input type="radio" name="payment" value="jazzcash">
+                <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px;"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg> Jazz Cash</strong>
+              </div>
+              <div class="payment-details" id="details-jazzcash" style="width: 100%; display: none;">
+                <div style="background: #f9f9f9; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; border: 1px solid #eee;">
+                  <strong style="color:var(--dark);">Title:</strong> <span id="bank-jazz-title">Ali imtiaz</span><br>
+                  <strong style="color:var(--dark);">Account:</strong> <span id="bank-jazz-account">03017462055</span>
+                </div>
+                <em style="color: var(--primary); font-size: 13px; display: block;">* Please share the payment receipt on WhatsApp after placing the order.</em>
+              </div>
+            </label>
+
+            <label class="radio-card" style="align-items: flex-start; flex-direction: column; gap: 5px;">
+              <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                <input type="radio" name="payment" value="meezan">
+                <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px;"><rect x="4" y="10" width="16" height="10"></rect><polygon points="12 2 2 7 22 7"></polygon><line x1="8" y1="10" x2="8" y2="20"></line><line x1="16" y1="10" x2="16" y2="20"></line></svg> Meezan Bank</strong>
+              </div>
+              <div class="payment-details" id="details-meezan" style="width: 100%; display: none;">
+                <div style="background: #f9f9f9; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; border: 1px solid #eee;">
+                  <strong style="color:var(--dark);">Title:</strong> <span id="bank-meezan-title">Imtiaz & sons traders</span><br>
+                  <strong style="color:var(--dark);">Account:</strong> <span id="bank-meezan-account">68010113530815</span><br>
+                  <strong style="color:var(--dark);">IBAN:</strong> <span id="bank-meezan-iban">PK59MEZN0068010113530815</span>
+                </div>
+                <em style="color: var(--primary); font-size: 13px; display: block;">* Please share the payment receipt on WhatsApp after placing the order.</em>
+              </div>
+            </label>
+
+            <label class="radio-card" style="align-items: flex-start; flex-direction: column; gap: 5px;">
+              <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                <input type="radio" name="payment" value="ubl">
+                <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px;"><rect x="4" y="10" width="16" height="10"></rect><polygon points="12 2 2 7 22 7"></polygon><line x1="8" y1="10" x2="8" y2="20"></line><line x1="16" y1="10" x2="16" y2="20"></line></svg> UBL Bank</strong>
+              </div>
+              <div class="payment-details" id="details-ubl" style="width: 100%; display: none;">
+                <div style="background: #f9f9f9; padding: 10px; border-radius: 4px; margin-bottom: 10px; font-size: 14px; border: 1px solid #eee;">
+                  <strong style="color:var(--dark);">Title:</strong> <span id="bank-ubl-title">Imtiaz and Sons Traders</span><br>
+                  <strong style="color:var(--dark);">Account:</strong> <span id="bank-ubl-account">2713378030254</span><br>
+                  <strong style="color:var(--dark);">IBAN:</strong> <span id="bank-ubl-iban">PK54UNIL0109000378030254</span>
+                </div>
+                <em style="color: var(--primary); font-size: 13px; display: block;">* Please share the payment receipt on WhatsApp after placing the order.</em>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <button type="submit" class="btn btn-primary w-full" style="font-size: 18px; padding: 20px;">PLACE ORDER</button>
+      </form>
+    </div>
+
+    <!-- Right: Review -->
+    <div>
+      <div class="order-summary" style="position: sticky; top: 100px;">
+        <h3>Order Review</h3>
+        
+        <div id="checkout-review-items" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
+          <!-- Injected via main.js -->
+        </div>
+
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="checkout-subtotal">Rs. 0</span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery Fee:</span>
+          <span id="checkout-delivery">Rs. 200</span>
+        </div>
+        <div class="summary-row" style="color: var(--success); font-weight: bold; background: rgba(40, 167, 69, 0.1); padding: 5px 10px; border-radius: 4px; margin-top: 10px;">
+          <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px;"><polyline points="20 6 9 17 4 12"></polyline></svg> 20% OFF applied</span>
+          <span></span>
+        </div>
+        
+        <div class="summary-total summary-row">
+          <span>Grand Total:</span>
+          <span id="checkout-total">Rs. 0</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Checkout Success Section -->
+  <section class="container" id="checkout-success" style="display:none; padding: 80px 20px; text-align: center; max-width: 600px; margin: 0 auto;">
+    <div class="success-animation-container" style="display: flex; justify-content: center; margin-bottom: 30px;">
+      <div class="success-checkmark">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+    </div>
+    <h2 style="font-family: 'Barlow', sans-serif; font-size: 32px; font-weight: 800; text-transform: uppercase; color: var(--dark); margin-bottom: 15px;">Order Confirmed!</h2>
+    <p style="color: #666; margin-bottom: 40px; font-size: 16px; line-height: 1.6;">Thank you for choosing CRYO. Your order has been successfully saved in our system.</p>
+    
+    <div style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
+      <button id="wa-redirect-btn" class="btn btn-primary" style="width: 100%; font-size: 16px; padding: 15px; display: flex; justify-content: center; align-items: center; gap: 10px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        Contact Us on WhatsApp
+      </button>
+      <a href="shop.html" class="btn" style="background: transparent; border: 2px solid #ddd; color: var(--dark); width: 100%; padding: 13px; font-size: 16px; text-align: center; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s;">Continue Shopping</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <site-footer></site-footer>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/cms-store.js"></script>
+  <script src="assets/js/cms.js"></script>
+  
+  <script src="assets/js/components.js?v=6" defer></script>
+  <script src="assets/js/main.js?v=6"></script>
+</body>
+</html>

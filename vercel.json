@@ -1,0 +1,15 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/login", "destination": "/admin/login.html" },
+    { "source": "/admin/dashboard", "destination": "/admin/dashboard.html" },
+    { "source": "/admin/products", "destination": "/admin/products.html" },
+    { "source": "/admin/orders", "destination": "/admin/orders.html" },
+    { "source": "/admin/settings", "destination": "/admin/settings.html" },
+    { "source": "/admin/seed", "destination": "/admin/seed.html" },
+    { "source": "/admin/banners", "destination": "/admin/banners.html" },
+    { "source": "/admin/content", "destination": "/admin/content.html" },
+    { "source": "/admin/reviews", "destination": "/admin/reviews.html" },
+    { "source": "/admin", "destination": "/admin/login.html" }
+  ]
+}

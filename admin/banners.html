@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banners | CRYO Admin</title>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <img src="../assets/images/cryo-logo-horizontal.png" alt="CRYO Logo">
+      </div>
+      <nav></nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="topbar">
+        <h1 class="page-title">Banner & Hero Images</h1>
+        <div class="user-profile">
+          <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div class="card-header">
+          <h3>Upload Images</h3>
+          <p style="color:var(--admin-text-muted); font-size:13px; margin:0;">Leave empty to keep the current image. Recommended: wide images for banners.</p>
+        </div>
+        <form id="banners-form">
+          <div class="banner-grid">
+            <div class="banner-upload-card">
+              <label>Homepage Hero</label>
+              <img id="preview-hero" class="banner-preview" alt="Hero preview">
+              <input type="file" id="banner-hero" accept="image/*" class="form-control">
+            </div>
+            <div class="banner-upload-card">
+              <label>Shop Page Banner</label>
+              <img id="preview-shop" class="banner-preview" alt="Shop preview">
+              <input type="file" id="banner-shop" accept="image/*" class="form-control">
+            </div>
+            <div class="banner-upload-card">
+              <label>About Page Banner</label>
+              <img id="preview-about-banner" class="banner-preview" alt="About banner preview">
+              <input type="file" id="banner-about-banner" accept="image/*" class="form-control">
+            </div>
+            <div class="banner-upload-card">
+              <label>Contact Page Banner</label>
+              <img id="preview-contact" class="banner-preview" alt="Contact preview">
+              <input type="file" id="banner-contact" accept="image/*" class="form-control">
+            </div>
+            <div class="banner-upload-card">
+              <label>Dealer Page Banner</label>
+              <img id="preview-dealer" class="banner-preview" alt="Dealer preview">
+              <input type="file" id="banner-dealer" accept="image/*" class="form-control">
+            </div>
+            <div class="banner-upload-card">
+              <label>About — Story Image</label>
+              <img id="preview-about-story" class="banner-preview" alt="Story preview">
+              <input type="file" id="banner-about-story" accept="image/*" class="form-control">
+            </div>
+            <div class="banner-upload-card">
+              <label>About — Quality Image</label>
+              <img id="preview-about-quality" class="banner-preview" alt="Quality preview">
+              <input type="file" id="banner-about-quality" accept="image/*" class="form-control">
+            </div>
+            <div class="banner-upload-card">
+              <label>Home — Benefits Image</label>
+              <img id="preview-benefits" class="banner-preview" alt="Benefits preview">
+              <input type="file" id="banner-benefits" accept="image/*" class="form-control">
+            </div>
+          </div>
+          <button type="submit" id="save-banners-btn" class="btn-admin" style="margin-top:20px;">Save Banner Images</button>
+          <p id="banners-msg" style="color:var(--admin-success); margin-top:10px; display:none;">Banners saved successfully!</p>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/cms-store.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/admin.js"></script>
+  <script src="assets/js/admin-nav.js"></script>
+  <script src="assets/js/cms-admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Handle explicit custom routes
+RewriteRule ^login/?$ admin/login.html [L]
+RewriteRule ^admin/?$ admin/login.html [L]
+
+# Automatically route clean URLs to their .html files
+# For example: /shop -> /shop.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L,QSA]
+</IfModule>

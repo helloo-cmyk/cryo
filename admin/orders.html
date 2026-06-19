@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders | CRYO Admin</title>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <img src="../assets/images/cryo-logo-horizontal.png" alt="CRYO Logo">
+      </div>
+      <nav></nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="topbar">
+        <h1 class="page-title">Manage Orders</h1>
+        <div class="user-profile">
+          <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div class="card-header">
+          <h3>All Orders</h3>
+          <button class="btn-sm" id="export-orders-btn">Export CSV</button>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="orders-table-body">
+            <!-- Populated by admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/admin.js"></script>
+  <script src="assets/js/admin-nav.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Logic handled by admin.js loadOrders()
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | CRYO Admin</title>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <img src="../assets/images/cryo-logo-horizontal.png" alt="CRYO Logo">
+      </div>
+      <nav></nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="topbar">
+        <h1 class="page-title">Global Settings</h1>
+        <div class="user-profile">
+          <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <!-- Contact Info -->
+        <div class="admin-card">
+          <div class="card-header"><h3>Contact Information</h3></div>
+          <form id="contact-form">
+            <div class="form-group">
+              <label>Phone (display format, e.g. 0301-4138007)</label>
+              <input type="text" id="s-phone" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>WhatsApp Number (format: 923... without +)</label>
+              <input type="text" id="s-wa" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="s-email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Address</label>
+              <textarea id="s-address" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn-admin">Save Contact Info</button>
+            <p id="contact-msg" class="settings-msg">Contact info saved!</p>
+          </form>
+        </div>
+
+        <!-- Delivery -->
+        <div class="admin-card">
+          <div class="card-header"><h3>Delivery Charges</h3></div>
+          <form id="settings-form">
+            <div style="display:flex; gap:15px;">
+              <div class="form-group" style="flex:1;">
+                <label>Standard Delivery</label>
+                <select id="s-delivery-type" class="form-control" style="margin-bottom: 8px;">
+                  <option value="custom">Custom Amount</option>
+                  <option value="free">Free Delivery</option>
+                </select>
+                <input type="number" id="s-delivery" class="form-control" placeholder="Amount">
+              </div>
+              <div class="form-group" style="flex:1;">
+                <label>Express Delivery (Rs)</label>
+                <input type="number" id="s-express-delivery" class="form-control" required>
+              </div>
+            </div>
+            <button type="submit" id="save-settings-btn" class="btn-admin">Update Delivery</button>
+            <p id="settings-msg" class="settings-msg">Delivery settings saved!</p>
+          </form>
+        </div>
+
+        <!-- Bank Accounts -->
+        <div class="admin-card">
+          <div class="card-header"><h3>Bank Account Details</h3></div>
+          <form id="bank-form">
+            <h4 class="form-section-label">Jazz Cash</h4>
+            <div class="form-group">
+              <label>Account Title</label>
+              <input type="text" id="s-jazz-title" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Account Number</label>
+              <input type="text" id="s-jazz-account" class="form-control">
+            </div>
+            <h4 class="form-section-label">Meezan Bank</h4>
+            <div class="form-group">
+              <label>Account Title</label>
+              <input type="text" id="s-meezan-title" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Account Number</label>
+              <input type="text" id="s-meezan-account" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>IBAN</label>
+              <input type="text" id="s-meezan-iban" class="form-control">
+            </div>
+            <h4 class="form-section-label">UBL Bank</h4>
+            <div class="form-group">
+              <label>Account Title</label>
+              <input type="text" id="s-ubl-title" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Account Number</label>
+              <input type="text" id="s-ubl-account" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>IBAN</label>
+              <input type="text" id="s-ubl-iban" class="form-control">
+            </div>
+            <button type="submit" class="btn-admin">Save Bank Details</button>
+            <p id="bank-msg" class="settings-msg">Bank details saved!</p>
+          </form>
+        </div>
+
+        <!-- Security -->
+        <div class="admin-card">
+          <div class="card-header"><h3>Security</h3></div>
+          <form id="password-form">
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" id="new-pwd" class="form-control" required minlength="6">
+            </div>
+            <button type="submit" id="update-pwd-btn" class="btn-admin" style="background:var(--admin-secondary);">Change Password</button>
+            <p id="pwd-msg" style="margin-top:10px; display:none;"></p>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/cms-store.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/admin.js"></script>
+  <script src="assets/js/admin-nav.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const waInput = document.getElementById('s-wa');
+      const phoneInput = document.getElementById('s-phone');
+      const emailInput = document.getElementById('s-email');
+      const addressInput = document.getElementById('s-address');
+      const deliveryType = document.getElementById('s-delivery-type');
+      const deliveryInput = document.getElementById('s-delivery');
+      const expressDeliveryInput = document.getElementById('s-express-delivery');
+
+      function handleTypeChange(typeEl, inputEl) {
+        if (typeEl.value === 'free') {
+          inputEl.style.display = 'none';
+          inputEl.removeAttribute('required');
+        } else {
+          inputEl.style.display = 'block';
+          inputEl.setAttribute('required', 'true');
+        }
+      }
+
+      deliveryType.addEventListener('change', () => handleTypeChange(deliveryType, deliveryInput));
+
+      function showMsg(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.style.display = 'block';
+          setTimeout(() => { el.style.display = 'none'; }, 3000);
+        }
+      }
+
+      try {
+        const cms = await loadSiteCms();
+        phoneInput.value = cms.phone_display || '0301-4138007';
+        emailInput.value = cms.email || 'info@cryo.pk';
+        addressInput.value = cms.address || '';
+        document.getElementById('s-jazz-title').value = cms.jazzcash_title || '';
+        document.getElementById('s-jazz-account').value = cms.jazzcash_account || '';
+        document.getElementById('s-meezan-title').value = cms.meezan_title || '';
+        document.getElementById('s-meezan-account').value = cms.meezan_account || '';
+        document.getElementById('s-meezan-iban').value = cms.meezan_iban || '';
+        document.getElementById('s-ubl-title').value = cms.ubl_title || '';
+        document.getElementById('s-ubl-account').value = cms.ubl_account || '';
+        document.getElementById('s-ubl-iban').value = cms.ubl_iban || '';
+
+        const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 'global').maybeSingle();
+        if (!error && data) {
+          waInput.value = data.whatsappNumber || '923014138007';
+          let fetchedDelivery = Number(data.deliveryCharge);
+          if (isNaN(fetchedDelivery)) fetchedDelivery = 200;
+          if (fetchedDelivery === 0 && data.deliveryCharge !== null) {
+            deliveryType.value = 'free';
+            deliveryInput.value = 0;
+          } else {
+            deliveryType.value = 'custom';
+            deliveryInput.value = fetchedDelivery;
+          }
+          expressDeliveryInput.value = data.expressDeliveryCharge || 350;
+        }
+        handleTypeChange(deliveryType, deliveryInput);
+      } catch (err) {
+        console.error("Error loading settings", err);
+      }
+
+      document.getElementById('contact-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const { error: cmsErr } = await saveSiteCms({
+          phone_display: phoneInput.value.trim(),
+          email: emailInput.value.trim(),
+          address: addressInput.value.trim()
+        });
+        const { error: waErr } = await mergeSettings({ whatsappNumber: waInput.value.trim() });
+        const error = cmsErr || waErr;
+        if (error) alert(cmsSchemaErrorMessage(error) || error.message);
+        else showMsg('contact-msg');
+      });
+
+      document.getElementById('settings-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('save-settings-btn');
+        btn.textContent = 'Updating...';
+        btn.disabled = true;
+        const stdCharge = deliveryType.value === 'free' ? 0 : Number(deliveryInput.value);
+        const { error } = await mergeSettings({
+          deliveryCharge: stdCharge,
+          expressDeliveryCharge: Number(expressDeliveryInput.value)
+        });
+        if (error) alert('Error: ' + error.message);
+        else showMsg('settings-msg');
+        btn.textContent = 'Update Delivery';
+        btn.disabled = false;
+      });
+
+      document.getElementById('bank-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const { error } = await saveSiteCms({
+          jazzcash_title: document.getElementById('s-jazz-title').value.trim(),
+          jazzcash_account: document.getElementById('s-jazz-account').value.trim(),
+          meezan_title: document.getElementById('s-meezan-title').value.trim(),
+          meezan_account: document.getElementById('s-meezan-account').value.trim(),
+          meezan_iban: document.getElementById('s-meezan-iban').value.trim(),
+          ubl_title: document.getElementById('s-ubl-title').value.trim(),
+          ubl_account: document.getElementById('s-ubl-account').value.trim(),
+          ubl_iban: document.getElementById('s-ubl-iban').value.trim()
+        });
+        if (error) alert(cmsSchemaErrorMessage(error) || error.message);
+        else showMsg('bank-msg');
+      });
+
+      document.getElementById('password-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pwd = document.getElementById('new-pwd').value;
+        const msg = document.getElementById('pwd-msg');
+        const { error } = await supabaseClient.auth.updateUser({ password: pwd });
+        if (!error) {
+          msg.textContent = 'Password updated successfully!';
+          msg.style.color = 'var(--admin-success)';
+          msg.style.display = 'block';
+          document.getElementById('password-form').reset();
+        } else {
+          msg.textContent = error.message;
+          msg.style.color = 'var(--admin-danger)';
+          msg.style.display = 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

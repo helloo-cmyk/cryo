@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products | CRYO Admin</title>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Quill Editor -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+</head>
+<body>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <img src="../assets/images/cryo-logo-horizontal.png" alt="CRYO Logo">
+      </div>
+      <nav></nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div class="topbar">
+        <h1 class="page-title">Manage Products</h1>
+        <div class="user-profile">
+          <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div class="card-header">
+          <h3>Product List</h3>
+          <button class="btn-sm" id="add-product-btn">Add New Product</button>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Size / Color</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-table-body">
+            <tr>
+              <td colspan="6" style="text-align:center;">Loading products...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Product Modal -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Add New Product</h3>
+        <button class="close-modal" id="close-modal">&times;</button>
+      </div>
+      <form id="product-form">
+        <input type="hidden" id="product-id">
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="p-name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Color Variant</label>
+          <select id="p-color" class="form-control">
+            <option value="green">Green</option>
+            <option value="red">Red</option>
+            <option value="blue">Blue</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Size Variant</label>
+          <select id="p-size" class="form-control">
+            <option value="1L">1 Liter</option>
+            <option value="4L">4 Liters</option>
+          </select>
+        </div>
+        
+        <h4 style="margin: 15px 0 10px; color: var(--admin-primary); font-size: 13px; text-transform: uppercase;">Pricing</h4>
+        <div style="display:flex; gap:15px;">
+          <div class="form-group" style="flex:1;">
+            <label>Regular Price (Rs)</label>
+            <input type="number" id="p-regular-price" class="form-control" required>
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label>Offer Price (Rs)</label>
+            <input type="number" id="p-offer-price" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Product Image</label>
+          <input type="file" id="p-image" class="form-control" accept="image/*">
+          <small style="color:var(--admin-text-muted);">Leave empty to keep existing image</small>
+        </div>
+        <div class="form-group">
+          <label>Short Description</label>
+          <textarea id="p-short-desc" class="form-control" rows="2" placeholder="Brief summary under the title..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Long Description</label>
+          <div id="p-long-desc"></div>
+        </div>
+        <div class="form-group">
+          <label>Features</label>
+          <div id="p-features"></div>
+        </div>
+        <div class="form-group">
+          <label>Specifications</label>
+          <div id="p-specs"></div>
+        </div>
+        <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+          <input type="checkbox" id="p-in-stock" checked>
+          <label for="p-in-stock" style="margin:0;">In Stock</label>
+        </div>
+        <button type="submit" class="btn-admin" id="save-product-btn">Save Product</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/admin.js"></script>
+  <script src="assets/js/admin-nav.js"></script>
+  <script>
+    // Product Page Specific Logic
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById('product-modal');
+      document.getElementById('add-product-btn').addEventListener('click', () => {
+        document.getElementById('product-form').reset();
+        document.getElementById('product-id').value = '';
+        if (typeof quillLongDesc !== 'undefined') {
+          quillLongDesc.root.innerHTML = '';
+          quillFeatures.root.innerHTML = '';
+          quillSpecs.root.innerHTML = '';
+        }
+        document.getElementById('modal-title').textContent = 'Add New Product';
+        modal.classList.add('active');
+      });
+      document.getElementById('close-modal').addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+    });
+  </script>
+</body>
+</html>
