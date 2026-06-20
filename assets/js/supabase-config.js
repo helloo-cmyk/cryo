@@ -1,3 +1,4 @@
+// GitHub connection test comment
 // Supabase Configuration
 // IMPORTANT: Replace these with your actual Supabase URL and Anon Key
 const SUPABASE_URL = 'https://rkeomjgvnedolkdppant.supabase.co';
