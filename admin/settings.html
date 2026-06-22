@@ -45,6 +45,10 @@
               <label>Address</label>
               <textarea id="s-address" class="form-control" rows="3" required></textarea>
             </div>
+            <div class="form-group">
+              <label>Google Maps Embed URL</label>
+              <input type="text" id="s-map" class="form-control" placeholder="https://maps.google.com/maps?q=...">
+            </div>
             <button type="submit" class="btn-admin">Save Contact Info</button>
             <p id="contact-msg" class="settings-msg">Contact info saved!</p>
           </form>
@@ -144,6 +148,7 @@
       const phoneInput = document.getElementById('s-phone');
       const emailInput = document.getElementById('s-email');
       const addressInput = document.getElementById('s-address');
+      const mapInput = document.getElementById('s-map');
       const deliveryType = document.getElementById('s-delivery-type');
       const deliveryInput = document.getElementById('s-delivery');
       const expressDeliveryInput = document.getElementById('s-express-delivery');
@@ -173,6 +178,7 @@
         phoneInput.value = cms.phone_display || '0301-4138007';
         emailInput.value = cms.email || 'info@cryo.pk';
         addressInput.value = cms.address || '';
+        mapInput.value = cms.map_embed_url || '';
         document.getElementById('s-jazz-title').value = cms.jazzcash_title || '';
         document.getElementById('s-jazz-account').value = cms.jazzcash_account || '';
         document.getElementById('s-meezan-title').value = cms.meezan_title || '';
@@ -206,7 +212,8 @@
         const { error: cmsErr } = await saveSiteCms({
           phone_display: phoneInput.value.trim(),
           email: emailInput.value.trim(),
-          address: addressInput.value.trim()
+          address: addressInput.value.trim(),
+          map_embed_url: mapInput.value.trim()
         });
         const { error: waErr } = await mergeSettings({ whatsappNumber: waInput.value.trim() });
         const error = cmsErr || waErr;

@@ -191,11 +191,33 @@ async function initReviewsPage() {
   const tbody = document.getElementById('reviews-table-body');
   if (!tbody) return;
 
+  // Populate products select dynamically
+  const productSelect = document.getElementById('review-product-id');
+  if (productSelect && typeof supabaseClient !== 'undefined') {
+    try {
+      const { data: productsData } = await supabaseClient.from('products').select('id, name');
+      if (productsData) {
+        productSelect.innerHTML = '<option value="brand">CRYO Brand (General)</option>';
+        productsData.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.name;
+          productSelect.appendChild(opt);
+        });
+      }
+    } catch (e) {
+      console.error("Failed to load products for review modal:", e);
+    }
+  }
+
   await loadReviewsTable();
 
   document.getElementById('add-review-btn').addEventListener('click', () => {
     document.getElementById('review-form').reset();
     document.getElementById('review-id').value = '';
+    if (document.getElementById('review-product-id')) {
+      document.getElementById('review-product-id').value = 'brand';
+    }
     document.getElementById('review-modal-title').textContent = 'Add Review';
     document.getElementById('review-modal').classList.add('active');
   });
@@ -213,7 +235,8 @@ async function initReviewsPage() {
       text: document.getElementById('review-text').value.trim(),
       author: document.getElementById('review-author').value.trim(),
       is_active: document.getElementById('review-active').checked,
-      sort_order: Number(document.getElementById('review-sort').value) || 0
+      sort_order: Number(document.getElementById('review-sort').value) || 0,
+      product_id: document.getElementById('review-product-id') ? document.getElementById('review-product-id').value : 'brand'
     };
 
     try {
@@ -239,24 +262,41 @@ async function loadReviewsTable() {
   const reviews = await loadAllTestimonialsAdmin();
 
   if (!reviews || reviews.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No reviews yet. Add your first review.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No reviews yet. Add your first review.</td></tr>';
     return;
   }
 
-  tbody.innerHTML = reviews.map(r => `
-    <tr>
-      <td>${'★'.repeat(r.rating || 5)}</td>
-      <td style="max-width:300px;">${r.text}</td>
-      <td>${r.author}</td>
-      <td><span class="badge ${r.is_active !== false ? 'badge-success' : 'badge-danger'}">${r.is_active !== false ? 'Active' : 'Hidden'}</span></td>
-      <td>
-        <div style="display:flex; gap:8px;">
-          <button class="btn-sm" style="background:#0D47A1;" onclick="editReview('${r.id}')">Edit</button>
-          <button class="btn-sm" style="background:var(--admin-danger);" onclick="deleteReview('${r.id}')">Delete</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+  // Load product list mapping
+  let productMap = { 'brand': 'CRYO Brand (General)' };
+  if (typeof supabaseClient !== 'undefined') {
+    try {
+      const { data } = await supabaseClient.from('products').select('id, name');
+      if (data) {
+        data.forEach(p => { productMap[p.id] = p.name; });
+      }
+    } catch (e) {
+      console.error("Failed to fetch product mappings:", e);
+    }
+  }
+
+  tbody.innerHTML = reviews.map(r => {
+    const targetName = productMap[r.product_id] || r.product_id || 'CRYO Brand (General)';
+    return `
+      <tr>
+        <td>${'★'.repeat(r.rating || 5)}</td>
+        <td style="max-width:300px;">${r.text}</td>
+        <td>${r.author}</td>
+        <td><span style="font-size:11px; font-weight:700; background:#f0f0f0; color:#333; padding:2px 8px; border-radius:4px; text-transform:uppercase;">${targetName}</span></td>
+        <td><span class="badge ${r.is_active !== false ? 'badge-success' : 'badge-danger'}">${r.is_active !== false ? 'Active' : 'Hidden'}</span></td>
+        <td>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-sm" style="background:#0D47A1;" onclick="editReview('${r.id}')">Edit</button>
+            <button class="btn-sm" style="background:var(--admin-danger);" onclick="deleteReview('${r.id}')">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 window.editReview = async function (id) {
@@ -270,6 +310,9 @@ window.editReview = async function (id) {
   document.getElementById('review-author').value = data.author || '';
   document.getElementById('review-active').checked = data.is_active !== false;
   document.getElementById('review-sort').value = data.sort_order || 0;
+  if (document.getElementById('review-product-id')) {
+    document.getElementById('review-product-id').value = data.product_id || 'brand';
+  }
   document.getElementById('review-modal-title').textContent = 'Edit Review';
   document.getElementById('review-modal').classList.add('active');
 };

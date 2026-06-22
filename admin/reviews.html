@@ -35,12 +35,13 @@
               <th>Rating</th>
               <th>Review</th>
               <th>Author</th>
+              <th>Target</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="reviews-table-body">
-            <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+            <tr><td colspan="6" style="text-align:center;">Loading...</td></tr>
           </tbody>
         </table>
       </div>
@@ -73,6 +74,13 @@
         <div class="form-group">
           <label>Author (e.g. Muhammad Usman – Multan)</label>
           <input type="text" id="review-author" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Review Target (Product/Brand)</label>
+          <select id="review-product-id" class="form-control">
+            <option value="brand">CRYO Brand (General)</option>
+            <!-- Dynamically populated from active database -->
+          </select>
         </div>
         <div class="form-group">
           <label>Sort Order (lower = first)</label>

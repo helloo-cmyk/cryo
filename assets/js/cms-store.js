@@ -7,6 +7,7 @@ const CMS_DEFAULTS = {
   phone_display: '0301-4138007',
   email: 'info@cryo.pk',
   address: 'Fiesta Garden, Nawan Shehar, Near RTO Office, Multan',
+  map_embed_url: 'https://maps.google.com/maps?q=Fiesta%20Garden%20Nawan%20Shehar%20Near%20RTO%20Office%20Multan&t=&z=13&ie=UTF8&iwloc=&output=embed',
   jazzcash_title: 'Ali imtiaz',
   jazzcash_account: '03017462055',
   meezan_title: 'Imtiaz & sons traders',
