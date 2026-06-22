@@ -766,25 +766,24 @@ function initProductPage() {
 }
 
 // --- Customer Reviews Section ---
-let allTestimonialsList = [];
+let allProductReviewsList = [];
 
 async function initProductReviews(product) {
   const modalProductName = document.getElementById('modal-product-name');
   if (modalProductName) modalProductName.textContent = product.name;
 
-  // Load reviews from page_content (testimonials)
+  // Load reviews from page_content (product_reviews)
   try {
-    if (typeof window.loadTestimonials === 'function') {
-      // Load all testimonials (active and inactive) to avoid dropping inactive ones when we write back
-      if (typeof window.loadAllTestimonialsAdmin === 'function') {
-        allTestimonialsList = await window.loadAllTestimonialsAdmin() || [];
+    if (typeof window.loadProductReviews === 'function') {
+      if (typeof window.loadAllProductReviewsAdmin === 'function') {
+        allProductReviewsList = await window.loadAllProductReviewsAdmin() || [];
       } else {
-        allTestimonialsList = await window.loadTestimonials() || [];
+        allProductReviewsList = await window.loadProductReviews() || [];
       }
     }
   } catch (e) {
-    console.error("Failed to load testimonials:", e);
-    allTestimonialsList = [];
+    console.error("Failed to load product reviews:", e);
+    allProductReviewsList = [];
   }
 
   renderReviewsTab(product);
@@ -793,7 +792,7 @@ async function initProductReviews(product) {
 
 function renderReviewsTab(product) {
   // Filter active reviews for this product
-  const productReviews = allTestimonialsList.filter(r => r.product_id === product.id && r.is_active !== false);
+  const productReviews = allProductReviewsList.filter(r => r.product_id === product.id && r.is_active !== false);
 
   const totalCount = productReviews.length;
   let avgRating = 0;
@@ -873,18 +872,7 @@ function renderReviewsTab(product) {
 }
 
 function renderFilteredReviewsList(product) {
-  const filterSelect = document.getElementById('review-filter-type');
-  const filterType = filterSelect ? filterSelect.value : 'all';
-
-  let filteredList = [];
-  if (filterType === 'product') {
-    filteredList = allTestimonialsList.filter(r => r.product_id === product.id && r.is_active !== false);
-  } else if (filterType === 'brand') {
-    filteredList = allTestimonialsList.filter(r => (r.product_id === 'brand' || !r.product_id) && r.is_active !== false);
-  } else {
-    // Show this product plus general brand reviews
-    filteredList = allTestimonialsList.filter(r => (r.product_id === product.id || r.product_id === 'brand' || !r.product_id) && r.is_active !== false);
-  }
+  let filteredList = allProductReviewsList.filter(r => r.product_id === product.id && r.is_active !== false);
 
   // Update subtitle counts
   const showingCount = document.getElementById('showing-reviews-count');
@@ -1044,11 +1032,10 @@ function setupReviewModalEvents(product) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const rating = Number(document.getElementById('review-rating-val').value);
       const name = document.getElementById('review-user-name').value.trim();
       const text = document.getElementById('review-user-text').value.trim();
-      const rating = ratingInputVal ? parseInt(ratingInputVal.value) : 5;
-      const reviewType = document.querySelector('input[name="review-type"]:checked').value;
-      const targetProductId = reviewType === 'product' ? product.id : 'brand';
+      const targetProductId = product.id;
 
       const submitBtn = form.querySelector('.btn-submit-review');
       if (submitBtn) {
@@ -1057,12 +1044,12 @@ function setupReviewModalEvents(product) {
       }
 
       try {
-        // Fetch current comprehensive testimonials array
+        // Fetch current comprehensive product reviews array
         let list = [];
-        if (typeof window.loadAllTestimonialsAdmin === 'function') {
-          list = await window.loadAllTestimonialsAdmin() || [];
-        } else if (typeof window.loadTestimonials === 'function') {
-          list = await window.loadTestimonials() || [];
+        if (typeof window.loadAllProductReviewsAdmin === 'function') {
+          list = await window.loadAllProductReviewsAdmin() || [];
+        } else if (typeof window.loadProductReviews === 'function') {
+          list = await window.loadProductReviews() || [];
         }
 
         const newReviewObj = {
@@ -1078,8 +1065,8 @@ function setupReviewModalEvents(product) {
         list.push(newReviewObj);
         list.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
 
-        if (typeof window.saveTestimonialsList === 'function') {
-          const { error } = await window.saveTestimonialsList(list);
+        if (typeof window.saveProductReviewsList === 'function') {
+          const { error } = await window.saveProductReviewsList(list);
           if (error) throw error;
         }
 
@@ -1097,7 +1084,7 @@ function setupReviewModalEvents(product) {
         }
 
         // Reload lists in-memory
-        allTestimonialsList = list;
+        allProductReviewsList = list;
         renderReviewsTab(product);
       } catch (err) {
         console.error("Failed to submit review:", err);

@@ -188,8 +188,9 @@ function showContentMsg(id) {
 }
 
 async function initReviewsPage() {
-  const tbody = document.getElementById('reviews-table-body');
-  if (!tbody) return;
+  const tbodyTestimonials = document.getElementById('reviews-table-body');
+  const tbodyProductReviews = document.getElementById('product-reviews-table-body');
+  if (!tbodyTestimonials && !tbodyProductReviews) return;
 
   // Populate products select dynamically
   const productSelect = document.getElementById('review-product-id');
@@ -197,7 +198,7 @@ async function initReviewsPage() {
     try {
       const { data: productsData } = await supabaseClient.from('products').select('id, name');
       if (productsData) {
-        productSelect.innerHTML = '<option value="brand">CRYO Brand (General)</option>';
+        productSelect.innerHTML = '';
         productsData.forEach(p => {
           const opt = document.createElement('option');
           opt.value = p.id;
@@ -210,17 +211,37 @@ async function initReviewsPage() {
     }
   }
 
-  await loadReviewsTable();
+  await loadBothReviewsTables();
 
-  document.getElementById('add-review-btn').addEventListener('click', () => {
+  const openModal = (title, type) => {
     document.getElementById('review-form').reset();
     document.getElementById('review-id').value = '';
-    if (document.getElementById('review-product-id')) {
-      document.getElementById('review-product-id').value = 'brand';
+    document.getElementById('admin-review-type').value = type;
+    document.getElementById('review-modal-title').textContent = title;
+    
+    if (type === 'testimonial') {
+      document.getElementById('review-target-group').style.display = 'none';
+      if (document.getElementById('review-product-id')) {
+        document.getElementById('review-product-id').value = 'brand';
+      }
+    } else {
+      document.getElementById('review-target-group').style.display = 'block';
+      if (productSelect && productSelect.options.length > 0) {
+        productSelect.value = productSelect.options[0].value;
+      }
     }
-    document.getElementById('review-modal-title').textContent = 'Add Review';
     document.getElementById('review-modal').classList.add('active');
-  });
+  };
+
+  const addTestimonialBtn = document.getElementById('add-review-btn');
+  if (addTestimonialBtn) {
+    addTestimonialBtn.addEventListener('click', () => openModal('Add Testimonial', 'testimonial'));
+  }
+
+  const addProductReviewBtn = document.getElementById('add-product-review-btn');
+  if (addProductReviewBtn) {
+    addProductReviewBtn.addEventListener('click', () => openModal('Add Product Review', 'product_review'));
+  }
 
   document.getElementById('close-review-modal').addEventListener('click', () => {
     document.getElementById('review-modal').classList.remove('active');
@@ -229,6 +250,9 @@ async function initReviewsPage() {
   document.getElementById('review-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const id = document.getElementById('review-id').value;
+    const type = document.getElementById('admin-review-type').value;
+    const productId = type === 'testimonial' ? 'brand' : document.getElementById('review-product-id').value;
+
     const reviewData = {
       id: id || crypto.randomUUID(),
       rating: Number(document.getElementById('review-rating').value),
@@ -236,94 +260,138 @@ async function initReviewsPage() {
       author: document.getElementById('review-author').value.trim(),
       is_active: document.getElementById('review-active').checked,
       sort_order: Number(document.getElementById('review-sort').value) || 0,
-      product_id: document.getElementById('review-product-id') ? document.getElementById('review-product-id').value : 'brand'
+      product_id: productId
     };
 
     try {
-      let list = await loadAllTestimonialsAdmin();
-      if (id) {
-        list = list.map(r => r.id === id ? { ...r, ...reviewData } : r);
+      if (type === 'testimonial') {
+        let list = await loadAllTestimonialsAdmin();
+        if (id) list = list.map(r => r.id === id ? { ...r, ...reviewData } : r);
+        else list.push(reviewData);
+        list.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+        const { error } = await saveTestimonialsList(list);
+        if (error) throw error;
       } else {
-        list.push(reviewData);
+        let list = await loadAllProductReviewsAdmin();
+        if (id) list = list.map(r => r.id === id ? { ...r, ...reviewData } : r);
+        else list.push(reviewData);
+        list.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+        const { error } = await saveProductReviewsList(list);
+        if (error) throw error;
       }
-      list.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
-      const { error } = await saveTestimonialsList(list);
-      if (error) throw error;
+
       document.getElementById('review-modal').classList.remove('active');
-      await loadReviewsTable();
+      await loadBothReviewsTables();
     } catch (err) {
       alert(cmsSchemaErrorMessage(err) || ('Error saving review: ' + err.message));
     }
   });
 }
 
-async function loadReviewsTable() {
-  const tbody = document.getElementById('reviews-table-body');
-  const reviews = await loadAllTestimonialsAdmin();
+async function loadBothReviewsTables() {
+  const tbodyTestimonials = document.getElementById('reviews-table-body');
+  const tbodyProductReviews = document.getElementById('product-reviews-table-body');
 
-  if (!reviews || reviews.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No reviews yet. Add your first review.</td></tr>';
-    return;
-  }
-
-  // Load product list mapping
   let productMap = { 'brand': 'CRYO Brand (General)' };
   if (typeof supabaseClient !== 'undefined') {
     try {
       const { data } = await supabaseClient.from('products').select('id, name');
-      if (data) {
-        data.forEach(p => { productMap[p.id] = p.name; });
-      }
+      if (data) data.forEach(p => { productMap[p.id] = p.name; });
     } catch (e) {
       console.error("Failed to fetch product mappings:", e);
     }
   }
 
-  tbody.innerHTML = reviews.map(r => {
-    const targetName = productMap[r.product_id] || r.product_id || 'CRYO Brand (General)';
-    return `
-      <tr>
-        <td>${'★'.repeat(r.rating || 5)}</td>
-        <td style="max-width:300px;">${r.text}</td>
-        <td>${r.author}</td>
-        <td><span style="font-size:11px; font-weight:700; background:#f0f0f0; color:#333; padding:2px 8px; border-radius:4px; text-transform:uppercase;">${targetName}</span></td>
-        <td><span class="badge ${r.is_active !== false ? 'badge-success' : 'badge-danger'}">${r.is_active !== false ? 'Active' : 'Hidden'}</span></td>
-        <td>
-          <div style="display:flex; gap:8px;">
-            <button class="btn-sm" style="background:#0D47A1;" onclick="editReview('${r.id}')">Edit</button>
-            <button class="btn-sm" style="background:var(--admin-danger);" onclick="deleteReview('${r.id}')">Delete</button>
-          </div>
-        </td>
-      </tr>
-    `;
-  }).join('');
+  if (tbodyTestimonials) {
+    const testimonials = await loadAllTestimonialsAdmin();
+    if (!testimonials || testimonials.length === 0) {
+      tbodyTestimonials.innerHTML = '<tr><td colspan="5" style="text-align:center;">No testimonials yet.</td></tr>';
+    } else {
+      tbodyTestimonials.innerHTML = testimonials.map(r => {
+        return `
+          <tr>
+            <td>${'★'.repeat(r.rating || 5)}</td>
+            <td style="max-width:300px;">${r.text}</td>
+            <td>${r.author}</td>
+            <td><span class="badge ${r.is_active !== false ? 'badge-success' : 'badge-danger'}">${r.is_active !== false ? 'Active' : 'Hidden'}</span></td>
+            <td>
+              <div style="display:flex; gap:8px;">
+                <button class="btn-sm" style="background:#0D47A1;" onclick="editReview('${r.id}', 'testimonial')">Edit</button>
+                <button class="btn-sm" style="background:var(--admin-danger);" onclick="deleteReview('${r.id}', 'testimonial')">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  }
+
+  if (tbodyProductReviews) {
+    const productReviews = await loadAllProductReviewsAdmin();
+    if (!productReviews || productReviews.length === 0) {
+      tbodyProductReviews.innerHTML = '<tr><td colspan="6" style="text-align:center;">No product reviews yet.</td></tr>';
+    } else {
+      tbodyProductReviews.innerHTML = productReviews.map(r => {
+        const targetName = productMap[r.product_id] || r.product_id || 'Unknown';
+        return `
+          <tr>
+            <td>${'★'.repeat(r.rating || 5)}</td>
+            <td style="max-width:300px;">${r.text}</td>
+            <td>${r.author}</td>
+            <td><span style="font-size:11px; font-weight:700; background:#f0f0f0; color:#333; padding:2px 8px; border-radius:4px; text-transform:uppercase;">${targetName}</span></td>
+            <td><span class="badge ${r.is_active !== false ? 'badge-success' : 'badge-danger'}">${r.is_active !== false ? 'Active' : 'Hidden'}</span></td>
+            <td>
+              <div style="display:flex; gap:8px;">
+                <button class="btn-sm" style="background:#0D47A1;" onclick="editReview('${r.id}', 'product_review')">Edit</button>
+                <button class="btn-sm" style="background:var(--admin-danger);" onclick="deleteReview('${r.id}', 'product_review')">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  }
 }
 
-window.editReview = async function (id) {
-  const reviews = await loadAllTestimonialsAdmin();
+window.editReview = async function (id, type) {
+  const reviews = type === 'testimonial' ? await loadAllTestimonialsAdmin() : await loadAllProductReviewsAdmin();
   const data = reviews.find(r => r.id === id);
   if (!data) return;
 
   document.getElementById('review-id').value = data.id;
+  document.getElementById('admin-review-type').value = type;
   document.getElementById('review-rating').value = data.rating || 5;
   document.getElementById('review-text').value = data.text || '';
   document.getElementById('review-author').value = data.author || '';
   document.getElementById('review-active').checked = data.is_active !== false;
   document.getElementById('review-sort').value = data.sort_order || 0;
-  if (document.getElementById('review-product-id')) {
-    document.getElementById('review-product-id').value = data.product_id || 'brand';
+  
+  if (type === 'testimonial') {
+    document.getElementById('review-target-group').style.display = 'none';
+    if (document.getElementById('review-product-id')) document.getElementById('review-product-id').value = 'brand';
+  } else {
+    document.getElementById('review-target-group').style.display = 'block';
+    if (document.getElementById('review-product-id')) document.getElementById('review-product-id').value = data.product_id || '';
   }
-  document.getElementById('review-modal-title').textContent = 'Edit Review';
+
+  document.getElementById('review-modal-title').textContent = type === 'testimonial' ? 'Edit Testimonial' : 'Edit Product Review';
   document.getElementById('review-modal').classList.add('active');
 };
 
-window.deleteReview = async function (id) {
+window.deleteReview = async function (id, type) {
   const confirmed = await customConfirm('Delete this review?');
   if (!confirmed) return;
-  const list = (await loadAllTestimonialsAdmin()).filter(r => r.id !== id);
-  const { error } = await saveTestimonialsList(list);
-  if (error) alert(cmsSchemaErrorMessage(error) || error.message);
-  else await loadReviewsTable();
+  
+  if (type === 'testimonial') {
+    const list = (await loadAllTestimonialsAdmin()).filter(r => r.id !== id);
+    const { error } = await saveTestimonialsList(list);
+    if (error) alert(cmsSchemaErrorMessage(error) || error.message);
+  } else {
+    const list = (await loadAllProductReviewsAdmin()).filter(r => r.id !== id);
+    const { error } = await saveProductReviewsList(list);
+    if (error) alert(cmsSchemaErrorMessage(error) || error.message);
+  }
+  await loadBothReviewsTables();
 };
 
 document.addEventListener('DOMContentLoaded', () => {

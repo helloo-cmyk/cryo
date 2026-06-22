@@ -2,6 +2,7 @@
 
 const CMS_SLUG = 'site_cms';
 const TESTIMONIALS_SLUG = 'testimonials';
+const PRODUCT_REVIEWS_SLUG = 'product_reviews';
 
 const CMS_DEFAULTS = {
   phone_display: '0301-4138007',
@@ -87,6 +88,32 @@ async function saveTestimonialsList(list) {
   return { error };
 }
 
+async function loadProductReviews() {
+  if (typeof supabaseClient === 'undefined') return [];
+  const { data, error } = await supabaseClient.from('page_content').select('content').eq('slug', PRODUCT_REVIEWS_SLUG).maybeSingle();
+  if (error || !data) return [];
+  const list = parseJsonContent(data.content, []);
+  return Array.isArray(list) ? list.filter(t => t.is_active !== false) : [];
+}
+
+async function loadAllProductReviewsAdmin() {
+  if (typeof supabaseClient === 'undefined') return [];
+  const { data, error } = await supabaseClient.from('page_content').select('content').eq('slug', PRODUCT_REVIEWS_SLUG).maybeSingle();
+  if (error || !data) return [];
+  const list = parseJsonContent(data.content, []);
+  return Array.isArray(list) ? list : [];
+}
+
+async function saveProductReviewsList(list) {
+  const { error } = await supabaseClient.from('page_content').upsert({
+    slug: PRODUCT_REVIEWS_SLUG,
+    title: 'Product Reviews',
+    content: JSON.stringify(list),
+    updated_at: new Date().toISOString()
+  });
+  return { error };
+}
+
 function cmsSchemaErrorMessage(error) {
   if (!error) return null;
   const msg = error.message || '';
@@ -102,4 +129,7 @@ window.saveSiteCms = saveSiteCms;
 window.loadTestimonials = loadTestimonials;
 window.loadAllTestimonialsAdmin = loadAllTestimonialsAdmin;
 window.saveTestimonialsList = saveTestimonialsList;
+window.loadProductReviews = loadProductReviews;
+window.loadAllProductReviewsAdmin = loadAllProductReviewsAdmin;
+window.saveProductReviewsList = saveProductReviewsList;
 window.cmsSchemaErrorMessage = cmsSchemaErrorMessage;

@@ -120,14 +120,6 @@
             <h3 class="reviews-section-title">Customer Feedback</h3>
             <div class="reviews-filter-bar">
               <span id="showing-reviews-count">Showing 0 reviews</span>
-              <div class="reviews-filter-options">
-                <label for="review-filter-type">Filter By:</label>
-                <select id="review-filter-type" class="reviews-select">
-                  <option value="all">All Reviews</option>
-                  <option value="product">This Product Only</option>
-                  <option value="brand">Brand Only</option>
-                </select>
-              </div>
             </div>
             <div class="reviews-list" id="product-reviews-list">
               <!-- Reviews dynamically injected -->
@@ -175,19 +167,7 @@
           </div>
           <input type="hidden" id="review-rating-val" value="5">
         </div>
-        <div class="form-group">
-          <label>Review For</label>
-          <div class="review-type-selector">
-            <label class="review-type-option active" id="type-opt-product">
-              <input type="radio" name="review-type" value="product" checked>
-              <span>This Product (<span id="modal-product-name">Product</span>)</span>
-            </label>
-            <label class="review-type-option" id="type-opt-brand">
-              <input type="radio" name="review-type" value="brand">
-              <span>CRYO Brand (General)</span>
-            </label>
-          </div>
-        </div>
+
         <div class="form-group">
           <label>Your Name</label>
           <input type="text" id="review-user-name" class="form-control" placeholder="e.g. Muhammad Usman – Lahore" required>

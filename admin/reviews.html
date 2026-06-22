@@ -27,7 +27,28 @@
       <div class="admin-card">
         <div class="card-header">
           <h3>Homepage Testimonials</h3>
-          <button class="btn-sm" id="add-review-btn">Add Review</button>
+          <button class="btn-sm" id="add-review-btn">Add Testimonial</button>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Rating</th>
+              <th>Review</th>
+              <th>Author</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reviews-table-body">
+            <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="admin-card" style="margin-top: 30px;">
+        <div class="card-header">
+          <h3>Customer Product Reviews</h3>
+          <button class="btn-sm" id="add-product-review-btn">Add Product Review</button>
         </div>
         <table class="admin-table">
           <thead>
@@ -40,7 +61,7 @@
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="reviews-table-body">
+          <tbody id="product-reviews-table-body">
             <tr><td colspan="6" style="text-align:center;">Loading...</td></tr>
           </tbody>
         </table>
@@ -57,6 +78,7 @@
       </div>
       <form id="review-form">
         <input type="hidden" id="review-id">
+        <input type="hidden" id="admin-review-type" value="testimonial">
         <div class="form-group">
           <label>Rating (1-5)</label>
           <select id="review-rating" class="form-control">
@@ -75,10 +97,9 @@
           <label>Author (e.g. Muhammad Usman – Multan)</label>
           <input type="text" id="review-author" class="form-control" required>
         </div>
-        <div class="form-group">
-          <label>Review Target (Product/Brand)</label>
+        <div class="form-group" id="review-target-group">
+          <label>Review Target Product</label>
           <select id="review-product-id" class="form-control">
-            <option value="brand">CRYO Brand (General)</option>
             <!-- Dynamically populated from active database -->
           </select>
         </div>
