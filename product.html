@@ -43,12 +43,7 @@
         
         <div id="product-rating-container" class="product-rating skeleton-pulse skeleton-text medium" style="margin-bottom: 20px; min-height: 20px;">
           <span style="opacity: 0; transition: opacity 0.3s;" id="product-rating-stars">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent-gold)" stroke="none" style="display:inline;margin-right:2px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            <span style="color: var(--text-muted); margin-left: 10px; font-weight: 600;">5.0 (128 reviews)</span>
+            <!-- Dynamically populated -->
           </span>
         </div>
 
@@ -84,6 +79,7 @@
         <button class="tab-btn active" data-tab="tab-desc">Description</button>
         <button class="tab-btn" data-tab="tab-features">Features</button>
         <button class="tab-btn" data-tab="tab-specs">Specifications</button>
+        <button class="tab-btn" data-tab="tab-reviews" id="tab-reviews-btn">Reviews (0)</button>
       </div>
 
       <div id="tab-desc" class="tab-content active">
@@ -96,6 +92,48 @@
 
       <div id="tab-specs" class="tab-content">
         <div id="product-specs" style="line-height: 1.8; color: var(--text-body); margin-top: 10px;"></div>
+      </div>
+
+      <div id="tab-reviews" class="tab-content">
+        <div class="reviews-wrapper">
+          <div class="reviews-summary-card">
+            <div class="reviews-summary-left">
+              <div class="avg-rating-box">
+                <span class="avg-rating-val" id="avg-rating-val">0.0</span>
+                <div class="stars-outer">
+                  <div class="stars-inner" id="avg-stars-inner"></div>
+                </div>
+                <span class="total-reviews-label" id="total-reviews-count-label">Based on 0 reviews</span>
+              </div>
+              <div class="rating-breakdown" id="rating-breakdown-bars">
+                <!-- Breakdown bars dynamically injected -->
+              </div>
+            </div>
+            <div class="reviews-summary-right">
+              <h4>Share Your Thoughts</h4>
+              <p>Been using CRYO products? Help other motorists make the right choice by leaving a review!</p>
+              <button class="btn btn-primary" id="write-review-trigger-btn" style="margin-top: 15px; padding: 12px 25px;">WRITE A REVIEW</button>
+            </div>
+          </div>
+
+          <div class="reviews-list-section">
+            <h3 class="reviews-section-title">Customer Feedback</h3>
+            <div class="reviews-filter-bar">
+              <span id="showing-reviews-count">Showing 0 reviews</span>
+              <div class="reviews-filter-options">
+                <label for="review-filter-type">Filter By:</label>
+                <select id="review-filter-type" class="reviews-select">
+                  <option value="all">All Reviews</option>
+                  <option value="product">This Product Only</option>
+                  <option value="brand">Brand Only</option>
+                </select>
+              </div>
+            </div>
+            <div class="reviews-list" id="product-reviews-list">
+              <!-- Reviews dynamically injected -->
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -118,5 +156,50 @@
   
   <script src="assets/js/components.js?v=6" defer></script>
   <script src="assets/js/main.js?v=10"></script>
+  <!-- Write a Review Modal -->
+  <div class="modal-overlay" id="write-review-modal">
+    <div class="modal-content review-modal-content">
+      <div class="modal-header">
+        <h3>Write a Review</h3>
+        <button class="close-modal" id="close-write-review-modal">&times;</button>
+      </div>
+      <form id="write-review-form">
+        <div class="form-group">
+          <label>Your Rating</label>
+          <div class="star-rating-input" id="star-rating-input">
+            <span class="star-input" data-value="1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+            <span class="star-input" data-value="2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+            <span class="star-input" data-value="3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+            <span class="star-input" data-value="4"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+            <span class="star-input" data-value="5"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+          </div>
+          <input type="hidden" id="review-rating-val" value="5">
+        </div>
+        <div class="form-group">
+          <label>Review For</label>
+          <div class="review-type-selector">
+            <label class="review-type-option active" id="type-opt-product">
+              <input type="radio" name="review-type" value="product" checked>
+              <span>This Product (<span id="modal-product-name">Product</span>)</span>
+            </label>
+            <label class="review-type-option" id="type-opt-brand">
+              <input type="radio" name="review-type" value="brand">
+              <span>CRYO Brand (General)</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="review-user-name" class="form-control" placeholder="e.g. Muhammad Usman – Lahore" required>
+        </div>
+        <div class="form-group">
+          <label>Review Message</label>
+          <textarea id="review-user-text" class="form-control" rows="4" placeholder="How was the cooling performance? Did it resolve overheating?" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit-review" style="width: 100%; padding: 12px 0;">SUBMIT REVIEW</button>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>
