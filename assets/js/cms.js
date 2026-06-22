@@ -130,6 +130,9 @@ async function loadPolicyPage(slug) {
 }
 
 function applyAboutContent() {
+  const isEmpty = (html) => !html || html.trim() === '' || html === '<p><br></p>';
+  const getHtml = (key) => isEmpty(cmsSettings[key]) ? CMS_DEFAULTS[key] : cmsSettings[key];
+
   const setHtml = (id, html) => {
     const el = document.getElementById(id);
     if (el && html) el.innerHTML = html;
@@ -139,20 +142,24 @@ function applyAboutContent() {
     if (el && text) el.textContent = text;
   };
 
-  setText('about-mission-title', cmsSettings.about_mission_title);
-  setHtml('about-mission-content', cmsSettings.about_mission_content);
-  if (cmsSettings.about_benefits_list) {
+  setText('about-mission-title', cmsSettings.about_mission_title || CMS_DEFAULTS.about_mission_title);
+  setHtml('about-mission-content', getHtml('about_mission_content'));
+  
+  const benefitsHtml = getHtml('about_benefits_list');
+  if (benefitsHtml) {
     const el = document.getElementById('about-benefits-list');
     if (el) {
-      const html = cmsSettings.about_benefits_list.trim();
+      const html = benefitsHtml.trim();
       if (html.startsWith('<ul')) el.outerHTML = html;
       else el.innerHTML = html;
     }
   }
-  setHtml('about-formula-title', cmsSettings.about_formula_title);
-  setHtml('about-formula-content', cmsSettings.about_formula_content);
-  setText('about-quality-title', cmsSettings.about_quality_title);
-  setHtml('about-quality-content', cmsSettings.about_quality_content);
+  
+  setText('about-formula-title', cmsSettings.about_formula_title || CMS_DEFAULTS.about_formula_title);
+  setHtml('about-formula-content', getHtml('about_formula_content'));
+  
+  setText('about-quality-title', cmsSettings.about_quality_title || CMS_DEFAULTS.about_quality_title);
+  setHtml('about-quality-content', getHtml('about_quality_content'));
 }
 
 function applyContactPage() {

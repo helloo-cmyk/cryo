@@ -91,8 +91,8 @@ async function initBannersPage() {
 let quillPolicy, quillAboutMission, quillAboutFormula, quillAboutQuality, quillAboutBenefits;
 
 async function initContentPage() {
-  const policyTab = document.getElementById('content-policy-tab');
-  if (!policyTab) return;
+  const tabsContainer = document.querySelector('.content-tabs');
+  if (!tabsContainer) return;
 
   quillPolicy = new Quill('#editor-policy', { theme: 'snow' });
   quillAboutMission = new Quill('#editor-about-mission', { theme: 'snow' });
@@ -120,13 +120,20 @@ async function initContentPage() {
   document.getElementById('save-about-btn').addEventListener('click', saveAboutContent);
 }
 
+const POLICY_DEFAULTS = {
+  'privacy-policy': '<p style="margin-bottom: 30px;">CRYO Radiator Coolant respects your privacy and is committed to protecting your personal data. This privacy policy explains how we collect and use your information.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Data Collection</h2><p style="margin-bottom: 30px;">We collect personal information such as your name, phone number, city, and delivery address when you place an order or submit a dealer inquiry. We do not collect or store any payment card details on our website.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Data Usage</h2><p style="margin-bottom: 30px;">The information we collect is used solely to process and fulfill your orders, communicate with you regarding your purchases, and improve our services. We may occasionally send promotional messages via WhatsApp, which you can opt out of at any time.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Data Protection</h2><p>We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties, except for trusted third-party courier services for the purpose of delivering your order. We implement reasonable security measures to maintain the safety of your personal information.</p>',
+  'terms': '<p style="margin-bottom: 30px;">Welcome to CRYO Radiator Coolant. By accessing this website and purchasing our products, you agree to be bound by these Terms & Conditions.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Product Usage</h2><p style="margin-bottom: 30px;">CRYO Radiator Coolant is formulated for use in automotive and industrial cooling systems. It must be used according to standard industry practices and vehicle manufacturer guidelines. We are not liable for any damage resulting from improper use, mixing with incompatible chemicals, or failure to follow general maintenance procedures.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Pricing and Availability</h2><p style="margin-bottom: 30px;">All prices are subject to change without notice. We reserve the right to modify or discontinue products at any time. In the event a product is listed at an incorrect price, we have the right to refuse or cancel any orders placed for that product.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Intellectual Property</h2><p>All content on this website, including logos, text, graphics, and images, is the property of CRYO Radiator Coolant and is protected by applicable copyright and trademark laws. Unauthorized use of this content is strictly prohibited.</p>',
+  'shipping-policy': '<p style="margin-bottom: 30px;">At CRYO Radiator Coolant, we strive to deliver your orders promptly and securely across Pakistan.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Delivery Timelines</h2><p style="margin-bottom: 30px;">We offer two delivery options: Standard Delivery and Express Delivery. Standard Delivery typically takes 2-4 business days, while Express Delivery takes 1-2 business days. Delivery times may vary depending on your location, especially for remote areas.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Order Processing</h2><p style="margin-bottom: 30px;">Orders are processed within 24 hours of confirmation. Orders placed on weekends or public holidays will be processed on the next business day. You will receive a confirmation message via WhatsApp once your order is processed and dispatched.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Cash on Delivery (COD)</h2><p>We offer Cash on Delivery (COD) across major cities in Pakistan. Please ensure that you have the exact amount ready at the time of delivery to facilitate a smooth transaction. For large wholesale orders, we may require partial advance payment via Bank Transfer or JazzCash/Easypaisa.</p>',
+  'return-policy': '<p style="margin-bottom: 30px;">Your satisfaction with CRYO Radiator Coolant is our top priority. Please read our return policy carefully.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Conditions for Returns</h2><p style="margin-bottom: 30px;">Because our coolant is a chemical product, we can only accept returns for items that are completely unused, sealed, and in their original packaging. Unsealed or opened bottles cannot be returned or exchanged due to quality control and safety reasons.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Damaged or Incorrect Items</h2><p style="margin-bottom: 30px;">If you receive a damaged bottle or the incorrect color/size, please notify us via WhatsApp within 48 hours of delivery. We will arrange a replacement at no additional cost to you. Please provide photographic evidence of the damage or incorrect item.</p><h2 style="color: var(--white); margin: 30px 0 15px; font-family: \'Barlow\', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 20px;">Refund Process</h2><p>Approved refunds will be processed via Bank Transfer or JazzCash/Easypaisa within 5-7 business days after we receive the returned item. Delivery charges are non-refundable unless the return is due to our error.</p>'
+};
+
 async function loadPolicyContent(slug) {
   const { data, error } = await supabaseClient.from('page_content').select('*').eq('slug', slug).maybeSingle();
   if (!error && data && data.content) {
     quillPolicy.root.innerHTML = data.content;
     document.getElementById('policy-title').value = data.title || '';
   } else {
-    quillPolicy.root.innerHTML = '';
+    quillPolicy.root.innerHTML = POLICY_DEFAULTS[slug] || '';
     document.getElementById('policy-title').value = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   }
 }
@@ -152,13 +159,17 @@ async function savePolicyContent() {
 
 async function loadAboutContent() {
   const cms = await loadSiteCms();
+  
+  const isEmpty = (html) => !html || html.trim() === '' || html === '<p><br></p>';
+
   document.getElementById('about-mission-title').value = cms.about_mission_title || 'Beyond Temperature';
   document.getElementById('about-formula-title').value = cms.about_formula_title || 'The Premium Formula';
   document.getElementById('about-quality-title').value = cms.about_quality_title || 'Quality Commitment';
-  if (cms.about_mission_content) quillAboutMission.root.innerHTML = cms.about_mission_content;
-  if (cms.about_formula_content) quillAboutFormula.root.innerHTML = cms.about_formula_content;
-  if (cms.about_quality_content) quillAboutQuality.root.innerHTML = cms.about_quality_content;
-  if (cms.about_benefits_list) quillAboutBenefits.root.innerHTML = cms.about_benefits_list;
+
+  quillAboutMission.root.innerHTML = !isEmpty(cms.about_mission_content) ? cms.about_mission_content : CMS_DEFAULTS.about_mission_content;
+  quillAboutFormula.root.innerHTML = !isEmpty(cms.about_formula_content) ? cms.about_formula_content : CMS_DEFAULTS.about_formula_content;
+  quillAboutQuality.root.innerHTML = !isEmpty(cms.about_quality_content) ? cms.about_quality_content : CMS_DEFAULTS.about_quality_content;
+  quillAboutBenefits.root.innerHTML = !isEmpty(cms.about_benefits_list) ? cms.about_benefits_list : CMS_DEFAULTS.about_benefits_list;
 }
 
 async function saveAboutContent() {

@@ -26,12 +26,12 @@ const CMS_DEFAULTS = {
   about_quality_image_url: 'assets/images/quality-commitment.png',
   benefits_image_url: 'assets/images/1l and 4l red.jpeg',
   about_mission_title: 'Beyond Temperature',
-  about_mission_content: '',
+  about_mission_content: '<p style="margin-bottom: 15px;"><strong>CRYO Radiator Coolant</strong> helps keep car engines and industrial machinery cool by controlling temperature and reducing overheating risk. Suitable for automobiles, commercial vehicles, generators, and industrial machinery cooling systems.</p><p style="margin-bottom: 25px;">From the scorching summer heat to heavy-duty industrial workloads, engines require more than just water—they need a shield.</p>',
   about_formula_title: 'The Premium Formula',
-  about_formula_content: '',
+  about_formula_content: '<p>What makes CRYO "Beyond Temperature"? It\'s our proprietary anti-rust and long-life formula. Standard coolants degrade quickly, leaving internal components vulnerable to scaling and corrosion. CRYO maintains a protective barrier, ensuring optimal heat transfer and extending the life of your radiator and water pump.</p>',
   about_quality_title: 'Quality Commitment',
-  about_quality_content: '',
-  about_benefits_list: ''
+  about_quality_content: '<p style="margin-bottom: 20px; line-height: 1.8;">Whether you\'re pouring CRYO Red into a commercial generator, or CRYO Green into your daily driver, you\'re getting a product that has been rigorously formulated for stability.</p><p style="margin-bottom: 20px; line-height: 1.8;">Every batch of CRYO coolant undergoes strict laboratory testing to ensure it meets high automotive standards. From anti-corrosion properties to extreme boiling point resilience, we guarantee a formula that performs flawlessly under the toughest conditions.</p><p style="line-height: 1.8;">Available in 1L and 4L packing with Red, Green and Blue variants, CRYO is the professional\'s choice for thermal management.</p>',
+  about_benefits_list: '<li>Helps protect engines from overheating</li><li>Supports stable cooling system performance</li><li>Suitable for cars, commercial vehicles, generators and industrial machinery</li><li>Professional coolant solution for daily and heavy-duty use</li>'
 };
 
 function parseJsonContent(raw, fallback) {
